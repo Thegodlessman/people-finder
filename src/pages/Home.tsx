@@ -4,7 +4,7 @@ import './Home.css';
 import { IonIcon, IonButton } from '@ionic/react';
 import { information, person, settingsSharp } from 'ionicons/icons';
 
-import MovieList from '../components/MoviesList';
+import MovieList from '../components/MoviesList/MoviesList';
 
 const Home: React.FC = () => {
 
