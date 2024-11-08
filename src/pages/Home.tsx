@@ -4,9 +4,9 @@ import './Home.css';
 import { IonIcon, IonButton } from '@ionic/react';
 import { information, person, settingsSharp } from 'ionicons/icons';
 
-const Home: React.FC = () => {
+import MovieList from '../components/MoviesList';
 
-  
+const Home: React.FC = () => {
 
   return (
     <>
@@ -38,7 +38,11 @@ const Home: React.FC = () => {
             <IonSearchbar></IonSearchbar>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen={true} className="ion-padding">Tap the button in the toolbar to open the menu.</IonContent>
+        <IonContent fullscreen={true} className="ion-padding">
+          
+          <MovieList/>
+
+        </IonContent>
       </IonPage>
     </>
   );
