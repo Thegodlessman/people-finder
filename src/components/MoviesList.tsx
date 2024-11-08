@@ -41,7 +41,7 @@ const MovieList: React.FC = () => {
             {movies.map((movie, index) => {
                 // Verificar y construir la URL de la imagen
                 const imageUrl = movie.poster_path 
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`// comentario
                     : 'https://via.placeholder.com/500x750?text=No+Image'; // Imagen de reserva si no hay poster_path
 
                 return (
