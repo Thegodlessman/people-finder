@@ -13,12 +13,17 @@ const Register: React.FC = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    
     const handleRegister = async () => {
+        // Verificación de confirmación de contraseña
+        if (password !== confirmPassword) {
+            toast.error('Las contraseñas no coinciden', { position: "bottom-center" });
+            return;
+        }
+
         try {
-            const response = await axios.post(`http://localhost:5757/register`, {
+            const response = await axios.post(`https://api-notepad-production.up.railway.app/register`, {
                 name,
                 lastName,
                 username,
@@ -26,10 +31,7 @@ const Register: React.FC = () => {
                 password
             });
             console.log("Usuario registrado:", response.data);
-            toast.success("Usuario registrado con éxito", {
-                position: "bottom-center"
-            });
-            setErrorMessage('');
+            toast.success("Usuario registrado con éxito");
         } catch (error: any) {
             if (error.response && error.response.status === 400) {
                 toast.error(error.response.data.msg, {
@@ -95,6 +97,15 @@ const Register: React.FC = () => {
                             className="input-group__input"
                             value={password} 
                             onIonChange={(e) => setPassword(e.detail.value!)} 
+                        />
+                    </div>
+                    <div className="input-group">
+                        <IonInput 
+                            placeholder="Confirme la contraseña" 
+                            type="password" 
+                            className="input-group__input"
+                            value={confirmPassword} 
+                            onIonChange={(e) => setConfirmPassword(e.detail.value!)} 
                         />
                     </div>
                 </div>

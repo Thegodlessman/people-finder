@@ -16,7 +16,7 @@ const MovieList: React.FC = () => {
 
     const loadMovies = async () => {
         try {
-            const response = await axios.get(`http://localhost:5757/movies`, { params: { page } });
+            const response = await axios.get(`https://api-notepad-production.up.railway.app/movies`, { params: { page } });
             const newMovies = response.data.peliculas;
 
             // Añadir las nuevas películas a la lista existente
