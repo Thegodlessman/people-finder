@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonRouterLink, IonInput, IonButton, IonText } from '@ionic/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useHistory } from 'react-router-dom'; // Importa useHistory
 
 import './Register.css'; // Asegúrate de que el archivo Register.css contiene el CSS que adaptamos
 
@@ -14,6 +15,8 @@ const Register: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const history = useHistory(); // Usamos el hook useHistory para la redirección
 
     const handleRegister = async () => {
         // Verificación de confirmación de contraseña
@@ -31,7 +34,14 @@ const Register: React.FC = () => {
                 password
             });
             console.log("Usuario registrado:", response.data);
-            toast.success("Usuario registrado con éxito");
+            toast.success("Usuario registrado con éxito", {
+                position: "bottom-center"
+            });
+
+            setTimeout(() => {
+                history.push('/login'); // Redirige a la página de login
+            }, 3000);
+
         } catch (error: any) {
             if (error.response && error.response.status === 400) {
                 toast.error(error.response.data.msg, {
