@@ -1,4 +1,3 @@
-// src/components/MovieList.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonItem, IonLabel, IonImg, IonThumbnail } from '@ionic/react';
