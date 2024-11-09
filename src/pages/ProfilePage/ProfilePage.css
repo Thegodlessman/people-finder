@@ -1,0 +1,30 @@
+.round-image {
+    width: 150px; /* Ajusta el tamaño de la imagen */
+    height: 150px; /* Mantén la proporción de la imagen */
+    border-radius: 50%;
+    object-fit: cover; /* Esto asegura que la imagen no se distorsione */
+    border: 2px solid #ddd; /* Borde para mejorar la visibilidad */
+}
+
+.image-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente si la tarjeta tiene altura definida */
+    padding-top: 20px; /* Opcional: agrega espacio superior para separar la imagen */
+}
+
+.logout-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.image-title {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    margin-top: 20px; /* Opcional: espacio superior */
+    font-size: 18px; /* Tamaño de texto ajustado */
+    font-weight: bold; /* Nombre en negrita */
+    color: #333; /* Color de texto */
+}

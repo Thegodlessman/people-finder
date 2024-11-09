@@ -25,8 +25,6 @@ const Home: React.FC = () => {
         <MovieCarousel category="upcoming" />
       </IonContent>
 
-        <TabBar/>
-
       </IonPage>
     </>
   );
