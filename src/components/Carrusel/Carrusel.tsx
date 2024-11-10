@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner } from "@ionic/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useHistory } from "react-router-dom";
 import 'swiper/css';
 import axios from "axios";
 
 interface Movie {
     id: number;
     title: string;
-    overview: string;
     poster_path: string;
     release_date: string;
+    vote_average: number;
+    vote_count: number;
 }
 
 interface MovieCarouselProps {
@@ -30,6 +32,7 @@ const categoryTitles: Record<string, string> = {
 const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const history = useHistory();
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -58,7 +61,11 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                 <Swiper slidesPerView={2} spaceBetween={10} centeredSlides autoplay={{ delay: 3000 }}>
                     {movies.map((movie) => (
                         <SwiperSlide key={movie.id}>
-                            <IonCard color="light">
+                            <IonCard 
+                            color="light" 
+                            style={{width: '100%'}} 
+                            onClick={() => history.push(`/movie/${movie.id}`)} 
+                            >
                                 <img 
                                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
                                     alt={movie.title} 
@@ -68,7 +75,10 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                                     <IonCardTitle>{movie.title}</IonCardTitle>
                                     <IonCardSubtitle>{new Date(movie.release_date).getFullYear()}</IonCardSubtitle>
                                 </IonCardHeader>
-                                <IonCardContent>{movie.overview.slice(0, 60)}...</IonCardContent>
+                                <IonCardContent>
+                                    <p style={{fontSize: 15}}><strong>Valoración:</strong> {movie.vote_average} / 10</p>
+                                    <p><strong>Votos:</strong> {movie.vote_count}</p>
+                                </IonCardContent>
                             </IonCard>
                         </SwiperSlide>
                     ))}
