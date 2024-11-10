@@ -9,7 +9,7 @@ const ProtectedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
             {isAuthenticated ? (
                 children
             ) : (
-                <Redirect to="/login" />
+                <Redirect to="/register-info" />
             )}
         </Route>
     );
