@@ -9,6 +9,8 @@ import SearchPage from './pages/SearchPage/SearchPage';
 import TabBar from './components/TabBar/TabBar';
 import FavPage from './pages/FavPage/FavPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import MovieDetailsPage from './pages/MovieDetaillsPage/MovieDetailsPage';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -55,6 +57,7 @@ const App: React.FC = () => (
           <Route path="/home/search" component={SearchPage} />
           <Route path="/home/favorite" component={FavPage}/>
           <Route path="/home/profile" component={ProfilePage}/>
+          <Route path="/movie/:movieId" component={MovieDetailsPage}/>
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>
