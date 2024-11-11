@@ -10,8 +10,6 @@ import TabBar from './components/TabBar/TabBar';
 import FavPage from './pages/FavPage/FavPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import MovieDetailsPage from './pages/MovieDetaillsPage/MovieDetailsPage';
-import ProtectedRoute from './components/ProtextedRoute/ProtectedRoute';
-import RegisterInfoPage from './pages/RegisterInfoPage/RegisterInfoPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -50,19 +48,20 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home />
+          </Route>
           <Route path="/register" component={Register} exact />
-          <Route path="/login" component={Login} exact/>
-          <Route path="/register-info" component={RegisterInfoPage} exact/>
-
-          <ProtectedRoute>
-            <SearchPage/>
-            <FavPage/>
-            <ProfilePage/>
-            <MovieDetailsPage/>
-            <Home/>
-          </ProtectedRoute>
-
+          <Route path="/login" component={Login} />
+          <Route path="/home/search" component={SearchPage} />
+          <Route path="/home/favorite" component={FavPage}/>
+          <Route path="/home/profile" component={ProfilePage}/>
+          <Route path="/movie/:movieId" component={MovieDetailsPage}/>
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
         </IonRouterOutlet>
+
         {/* TabBar debe estar dentro de IonTabs para que funcione */}
         <TabBar />
       </IonTabs>
