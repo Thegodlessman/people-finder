@@ -1,17 +1,19 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact, IonTabs } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { useLocation } from 'react-router-dom';
 
 import Home from './pages/Home';
-import Register from './pages/RegisterPage/Register'
-import Login from './pages/LoginPage/Login'
+import Register from './pages/RegisterPage/Register';
+import Login from './pages/LoginPage/Login';
 import SearchPage from './pages/SearchPage/SearchPage';
 import TabBar from './components/TabBar/TabBar';
 import FavPage from './pages/FavPage/FavPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import MovieDetailsPage from './pages/MovieDetaillsPage/MovieDetailsPage';
-import ProtectedRoute from './components/ProtextedRoute/ProtectedRoute';
 import RegisterInfoPage from './pages/RegisterInfoPage/RegisterInfoPage';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import { AuthProvider } from './components/AuthContext.tsx/AuthContext';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -45,29 +47,46 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
+const App: React.FC = () => {
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
+
+// Crea el componente AppContent para aislar el uso de useLocation dentro del contexto correcto
+const AppContent: React.FC = () => {
+  const location = useLocation();
+
+  const hideTabBarRoutes = ['/register', '/login', '/register-info'];
+  const showTabBar = !hideTabBarRoutes.includes(location.pathname);
+
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+      <Route exact path="/home">
+            <Home />
+          </Route>
           <Route path="/register" component={Register} exact />
-          <Route path="/login" component={Login} exact/>
-          <Route path="/register-info" component={RegisterInfoPage} exact/>
+          <Route path="/login" component={Login} />
+          <Route path="/home/search" component={SearchPage} />
+          <Route path="/home/favorite" component={FavPage}/>
+          <Route path="/home/profile" component={ProfilePage}/>
+          <Route path="/movie/:movieId" component={MovieDetailsPage}/>
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
+      </IonRouterOutlet>
 
-          <ProtectedRoute>
-            <SearchPage/>
-            <FavPage/>
-            <ProfilePage/>
-            <MovieDetailsPage/>
-            <Home/>
-          </ProtectedRoute>
-
-        </IonRouterOutlet>
-        {/* TabBar debe estar dentro de IonTabs para que funcione */}
-        <TabBar />
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+      {/* Renderiza TabBar solo si showTabBar es true */}
+      {showTabBar && <TabBar />}
+    </IonTabs>
+  );
+};
 
 export default App;
