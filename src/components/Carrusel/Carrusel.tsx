@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner } from "@ionic/react";
+import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner, IonItem } from "@ionic/react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useHistory } from "react-router-dom";
 import 'swiper/css';
 import axios from "axios";
+import './Carrusel.css';
 
 interface Movie {
     id: number;
@@ -53,8 +54,8 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
     const displayTitle = categoryTitles[category] || category;
 
     return (
-        <div>
-            <h2 style={{ color: 'white', textAlign: 'center', margin: '1rem 0' }}>{displayTitle}</h2>
+        <div className="carousel-container">
+            <IonItem className="category-title" style={{ color: 'black'}}>{displayTitle}</IonItem>
             {loading ? (
                 <IonSpinner />
             ) : (
@@ -62,6 +63,7 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                     {movies.map((movie) => (
                         <SwiperSlide key={movie.id}>
                             <IonCard 
+                            className="card"
                             color="light" 
                             style={{width: '100%'}} 
                             onClick={() => history.push(`/movie/${movie.id}`)} 
@@ -72,11 +74,11 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                                     style={{ width: '100%', borderRadius: '8px 8px 0 0' }}
                                 />
                                 <IonCardHeader>
-                                    <IonCardTitle>{movie.title}</IonCardTitle>
+                                    <IonCardTitle className="card-title">{movie.title}</IonCardTitle>
                                     <IonCardSubtitle>{new Date(movie.release_date).getFullYear()}</IonCardSubtitle>
                                 </IonCardHeader>
                                 <IonCardContent>
-                                    <p style={{fontSize: 15}}><strong>Valoración:</strong> {movie.vote_average} / 10</p>
+                                    <p className="card-subtitle"><strong>Valoración:</strong> {movie.vote_average} / 10</p>
                                     <p><strong>Votos:</strong> {movie.vote_count}</p>
                                 </IonCardContent>
                             </IonCard>
