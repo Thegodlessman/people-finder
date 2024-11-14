@@ -1,0 +1,21 @@
+/* Login.css */
+ion-label {
+    font-size: larger;
+    font-weight: bold;
+
+}
+
+.ion-item {
+    margin: 15px 25px;
+    
+}
+
+ion-item {
+    margin: 15px 10px;
+    
+}
+
+ion-button {
+    margin: 10px 20px;
+}
+

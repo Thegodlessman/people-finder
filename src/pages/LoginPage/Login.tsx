@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, IonText } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonText } from '@ionic/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useHistory } from 'react-router-dom'; // Importa useHistory
+import { useHistory } from 'react-router-dom';
+import './Login.css';
+import { eye, eyeOutline, lockClosed } from 'ionicons/icons';
+
 
 // commit de sophia
 
@@ -41,29 +44,41 @@ const Login: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Iniciar sesión</IonTitle>
+                    <IonTitle>DePelis!</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent className="container">
-                <div className="inputs-container">
-                    <IonItem>
-                        <IonInput 
-                            placeholder="Usuario o Email"
+            <IonContent>
+                <div>
+                    <div className='ion-item'>
+                        <h2>Iniciar Sesion</h2>
+                    </div>
+                    <div className='ion-item'>
+                        <IonInput
+                            label="Email" 
+                            placeholder="Ingresa tu email"
                             value={loginValue}
                             onIonChange={(e) => setLoginValue(e.detail.value!)}
                         />
-                    </IonItem>
-                    <IonItem>
+                    </div>
+                    <div className='ion-item'>
                         <IonInput 
+                            label="Contraseña"
+
                             type="password"
-                            placeholder="Contraseña"
+                            placeholder="Ingrea tu contraseña"
                             value={password}
                             onIonChange={(e) => setPassword(e.detail.value!)}
                         />
-                    </IonItem>
+                    </div>
                     
                 </div>
-                <IonButton expand="block" onClick={handleLogin}>Iniciar sesión</IonButton>
+                <IonButton expand='block' onClick={handleLogin}>Iniciar sesión</IonButton>
+                <IonText className="ion-text-center">
+                    <p className='smalltext'>
+                        ¿Aun no tiene cuenta? <a href="/register">Registrate</a>
+                    </p>
+                </IonText>
+
                 <ToastContainer />
             </IonContent>
         </IonPage>

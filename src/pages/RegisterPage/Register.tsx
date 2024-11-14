@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom'; // Importa useHistory
 
-import './Register.css'; // Asegúrate de que el archivo Register.css contiene el CSS que adaptamos
+import './Register.css'; 
 
 
 const Register: React.FC = () => {
@@ -60,57 +60,58 @@ const Register: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>¡Bienvenido a <a className='logo-title' href="/">DePelis</a>!</IonTitle>
+                    <IonTitle>DePelis!</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="container"> {/* Añadimos la clase container */}
-                <IonText className="register-title">
-                    <h2>¡Regístrate!</h2>
-                </IonText>
+                <div className='ion-item'>
+                    <h2>Crear cuenta</h2>
+                </div>
                 <div className='inputs-container'>
                     <div className="input-group">
                         <IonInput 
+                            label="Nombre" 
                             placeholder="Ingrese su nombre" 
-                            className="input-group__input"
                             value={name} 
                             onIonChange={(e) => setName(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                            label="Apellido"
                             placeholder="Ingrese su apellido" 
-                            className="input-group__input"
                             value={lastName} 
                             onIonChange={(e) => setLastName(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                            label="Usuario"
                             placeholder="Ingrese un nombre de usuario" 
-                            className="input-group__input"
                             value={username} 
                             onIonChange={(e) => setUsername(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                            label="Email"
                             placeholder="Ingrese su correo electrónico" 
-                            className="input-group__input"
                             value={email} 
                             onIonChange={(e) => setEmail(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                            label="Contraseña"
                             placeholder="Ingrese una contraseña" 
                             type="password" 
-                            className="input-group__input"
                             value={password} 
                             onIonChange={(e) => setPassword(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                            label="Confirmacion"
                             placeholder="Confirme la contraseña" 
                             type="password" 
                             className="input-group__input"
@@ -120,11 +121,11 @@ const Register: React.FC = () => {
                     </div>
                 </div>
                 <ToastContainer />
-                <div className='button-container'>
-                    <IonButton expand="block" onClick={handleRegister} className="custom-button" fill='clear'>Registrar</IonButton>
+                <div>
+                    <IonButton expand='block' onClick={handleRegister}>Registrar</IonButton>
                     <IonText className="ion-text-center">
                         <p className='smalltext'>
-                            ¿Ya te has registrado? <IonRouterLink href="/login">Iniciar sesión</IonRouterLink>
+                            ¿Ya tienes cuenta? <IonRouterLink href="/login">Iniciar sesión</IonRouterLink>
                         </p>
                     </IonText>
                 </div>
