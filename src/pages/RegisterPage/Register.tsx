@@ -70,7 +70,9 @@ const Register: React.FC = () => {
                 <div className='inputs-container'>
                     <div className="input-group">
                         <IonInput 
-                            label="Nombre" 
+                            label="Nombre"
+                            fill="solid"
+                            labelPlacement="floating" 
                             placeholder="Ingrese su nombre" 
                             value={name} 
                             onIonChange={(e) => setName(e.detail.value!)} 
@@ -79,6 +81,8 @@ const Register: React.FC = () => {
                     <div className="input-group">
                         <IonInput 
                             label="Apellido"
+                            fill="solid"
+                            labelPlacement="floating"
                             placeholder="Ingrese su apellido" 
                             value={lastName} 
                             onIonChange={(e) => setLastName(e.detail.value!)} 
@@ -87,6 +91,8 @@ const Register: React.FC = () => {
                     <div className="input-group">
                         <IonInput 
                             label="Usuario"
+                            fill="solid"
+                            labelPlacement="floating"
                             placeholder="Ingrese un nombre de usuario" 
                             value={username} 
                             onIonChange={(e) => setUsername(e.detail.value!)} 
@@ -95,6 +101,8 @@ const Register: React.FC = () => {
                     <div className="input-group">
                         <IonInput 
                             label="Email"
+                            fill="solid"
+                            labelPlacement="floating"
                             placeholder="Ingrese su correo electrónico" 
                             value={email} 
                             onIonChange={(e) => setEmail(e.detail.value!)} 
@@ -103,6 +111,8 @@ const Register: React.FC = () => {
                     <div className="input-group">
                         <IonInput 
                             label="Contraseña"
+                            fill="solid"
+                            labelPlacement="floating"
                             placeholder="Ingrese una contraseña" 
                             type="password" 
                             value={password} 
@@ -112,9 +122,10 @@ const Register: React.FC = () => {
                     <div className="input-group">
                         <IonInput 
                             label="Confirmacion"
+                            fill="solid"
+                            labelPlacement="floating"
                             placeholder="Confirme la contraseña" 
                             type="password" 
-                            className="input-group__input"
                             value={confirmPassword} 
                             onIonChange={(e) => setConfirmPassword(e.detail.value!)} 
                         />
