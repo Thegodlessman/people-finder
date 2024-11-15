@@ -55,7 +55,7 @@ const ProfilePage: React.FC = () => {
             </IonCard>
 
             <IonIcon aria-hidden="true" icon={call} slot="start"></IonIcon>
-            <IonLabel className="logout-container">Cerrar Sesion</IonLabel>
+            <a className="logout-container">Cerrar Sesion</a>
             </IonContent>           
         </IonPage>
     )

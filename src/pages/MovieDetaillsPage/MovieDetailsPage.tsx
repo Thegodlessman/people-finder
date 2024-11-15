@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonText, IonButtons, IonBackButton, IonButton } from "@ionic/react";
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonText, IonButtons, IonBackButton, IonButton, IonSegment, IonSegmentContent } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 import jwt_decode from "jwt-decode";
+import './MovieDetailsPage.css'
+import { IonSegmentButton, IonLabel } from "@ionic/react";
 
 interface Movie {
     title: string;
@@ -99,14 +101,12 @@ const MovieDetailsPage: React.FC = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar style={{ padding: "0.8rem" }}>
-                    <IonButtons slot="start">
-                        <IonBackButton defaultHref="/" text="Atrás" />
-                    </IonButtons>
-                    <IonTitle>Detalles</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+            <IonToolbar style={{ padding: "0.8rem" }}>
+                <IonButtons slot="start">
+                    <IonBackButton defaultHref="/"/>
+                </IonButtons>
+                <IonTitle className="ion-title">Detalles</IonTitle>
+            </IonToolbar>
             <IonContent>
                 <ToastContainer />
                 {loading ? (
@@ -119,6 +119,14 @@ const MovieDetailsPage: React.FC = () => {
                             style={{ width: "100%", borderRadius: "8px" }}
                         />
                         <h2>{movie.title}</h2>
+                        <IonSegment value="all">
+                            <IonSegmentButton value="all">
+                                <IonLabel>Info</IonLabel>
+                            </IonSegmentButton>
+                            <IonSegmentButton value="favorites">
+                                <IonLabel>Comentarios</IonLabel>
+                            </IonSegmentButton>
+                        </IonSegment>
                         <IonText color="medium">
                             <p>Estreno: {new Date(movie.release_date).toLocaleDateString()}</p>
                             <p>Valoración: {movie.vote_average} / 10 ({movie.vote_count} votos)</p>
