@@ -234,7 +234,7 @@ const MovieDetailsPage: React.FC = () => {
                         <h3>Géneros</h3>
                         <IonText color="primary">
                             {movie.genres.map(genre => (
-                                <span key={genre.id} style={{ marginRight: "8px", color: "black" }}>{genre.name}</span>
+                                <span key={genre.id} style={{ marginRight: "8px" }}>{genre.name}</span>
                             ))}
                         </IonText>
 
@@ -244,7 +244,7 @@ const MovieDetailsPage: React.FC = () => {
                         </IonText>
 
                         <IonButton expand="block" onClick={isFavorite ? removeFromFavorites : addToFavorites}>
-                            {isFavorite ? "Colocar en Guardados" : "Quitar de Guardados"}
+                            {isFavorite ? "Quitar de Guardados" : "Colocar en Guardados"}
                         </IonButton>
 
                         <h3>Deja un comentario</h3>
