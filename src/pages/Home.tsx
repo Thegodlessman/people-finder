@@ -13,13 +13,11 @@ const Home: React.FC = () => {
   return (
     <>
       <IonPage id="main-content">
-      <IonHeader translucent={true}>
         <IonToolbar style={{ padding: '7px' }}>
           <IonTitle class="ion-text-center">DePelis!</IonTitle>
         </IonToolbar>
-      </IonHeader>
       
-      <IonContent fullscreen={true} className="ion-padding">
+      <IonContent fullscreen={true}>
         <MovieCarousel category="popular" />
         <MovieCarousel category="top_rated" />
         <MovieCarousel category="upcoming" />

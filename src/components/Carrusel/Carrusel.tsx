@@ -76,10 +76,6 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                                     <IonCardTitle className="card-title">{movie.title}</IonCardTitle>
                                     
                                 </IonCardHeader>
-                                <IonCardContent>
-                                    <p className="card-subtitle"><strong>Valoración:</strong> {movie.vote_average} / 10</p>
-                                    <p><strong>Votos:</strong> {movie.vote_count}</p>
-                                </IonCardContent>
                             </IonCard>
                         </SwiperSlide>
                     ))}

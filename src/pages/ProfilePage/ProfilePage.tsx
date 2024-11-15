@@ -6,11 +6,9 @@ import './ProfilePage.css';
 const ProfilePage: React.FC = () => {
     return(
         <IonPage>
-            <IonHeader translucent={true}>
                 <IonToolbar style={{ padding: '7px' }}>
                     <IonTitle class="text-aling">Perfil</IonTitle>
                 </IonToolbar>
-            </IonHeader> 
             <IonContent>
             <div className="image-container">
                     <img src="https://live.staticflickr.com/8258/8683827826_7345599262_b.jpg" className="round-image" />
