@@ -48,6 +48,7 @@ const MovieDetailsPage: React.FC = () => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [userComment, setUserComment] = useState<string>("");
     const [userRating, setUserRating] = useState<number>(5);
+    const [existingComment, setExistingComment] = useState<Comment | null>(null);
 
     const getUserIdFromToken = (): string | null => {
         const token = localStorage.getItem("token");
@@ -62,7 +63,21 @@ const MovieDetailsPage: React.FC = () => {
         return null;
     };
 
+    const getUsernameFromToken = (): string | null => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded: any = jwt_decode(token);
+                return decoded.username;  // Asegúrate de que el token tenga el campo `username`
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+            }
+        }
+        return null;
+    };
+
     const userId = getUserIdFromToken();
+    const username = getUsernameFromToken();
 
     const fetchMovieDetails = async () => {
         try {
@@ -81,8 +96,10 @@ const MovieDetailsPage: React.FC = () => {
         try {
             const response = await axios.get(`https://api-notepad-production.up.railway.app/comments/${movieId}`);
             setComments(response.data);
+            const userComment = response.data.find((comment: Comment) => comment.userId === userId);
+            if (userComment) setExistingComment(userComment);
         } catch (error) {
-            toast.error("Error al cargar comentarios");
+            toast.error("Error al cargar comentarios", { position: "bottom-center" });
         }
     };
 
@@ -109,7 +126,7 @@ const MovieDetailsPage: React.FC = () => {
                 genres: movie.genres.map(genre => genre.name),
             });
             setIsFavorite(true);
-            toast.success("Película guardada en favoritos.", { position: "bottom-center" });
+            toast.success("Película guardada.", { position: "bottom-center" });
         } catch (error) {
             toast.error("Error al guardar en favoritos.", { position: "bottom-center" });
         }
@@ -121,13 +138,13 @@ const MovieDetailsPage: React.FC = () => {
                 data: { userId, movieId }
             });
             setIsFavorite(false);
-            toast.success("Película eliminada de favoritos.", { position: "bottom-center" });
+            toast.success("Película eliminada de guardados.", { position: "bottom-center" });
         } catch (error) {
             toast.error("Error al eliminar de favoritos.", { position: "bottom-center" });
         }
     };
 
-    const handleAddComment = async () => {
+    const handleAddOrUpdateComment = async () => {
         if (userComment.length > 240) {
             toast.error("El comentario no debe superar los 240 caracteres");
             return;
@@ -136,21 +153,35 @@ const MovieDetailsPage: React.FC = () => {
             toast.error("La valoración debe estar entre 1 y 10");
             return;
         }
-
+        
         try {
             await axios.post("https://api-notepad-production.up.railway.app/comments", {
                 movieId,
                 userId,
+                username,  // Asegúrate de enviar el username
                 comment: userComment,
                 rating: userRating
             });
-
-            toast.success("Comentario añadido con éxito");
+    
+            toast.success("Comentario añadido con éxito", { position: "bottom-center" });
             setUserComment("");
             setUserRating(5);
             fetchComments();
         } catch (error) {
-            toast.error("Error al añadir comentario");
+            toast.error("Error al añadir comentario", { position: "bottom-center" });
+        }
+    };
+
+    const handleDeleteComment = async () => {
+        try {
+            await axios.delete(`https://api-notepad-production.up.railway.app/comments/${movieId}/${userId}`);
+            toast.success("Comentario eliminado", { position: "bottom-center" });
+            setExistingComment(null);
+            setUserComment("");
+            setUserRating(5);
+            fetchComments();
+        } catch (error) {
+            toast.error("Error al eliminar comentario", { position: "bottom-center" });
         }
     };
 
@@ -198,12 +229,10 @@ const MovieDetailsPage: React.FC = () => {
                             <p>{movie.overview}</p>
                         </IonText>
 
-                        {/* Botón para agregar o quitar de favoritos */}
                         <IonButton expand="block" onClick={isFavorite ? removeFromFavorites : addToFavorites}>
-                            {isFavorite ? "Quitar de Favoritos" : "Guardar en Favoritos"}
+                            {isFavorite ? "Colocar en Guardados" : "Quitar de Guardados"}
                         </IonButton>
 
-                        {/* Formulario de nuevo comentario */}
                         <h3>Deja un comentario</h3>
                         <IonItem>
                             <IonTextarea
@@ -223,34 +252,35 @@ const MovieDetailsPage: React.FC = () => {
                                 max={10}
                             />
                         </IonItem>
-                        <IonButton expand="block" onClick={handleAddComment}>
-                            Enviar comentario
+                        <IonButton expand="block" onClick={handleAddOrUpdateComment}>
+                            {existingComment ? "Actualizar comentario" : "Enviar comentario"}
                         </IonButton>
+                        {existingComment && (
+                            <IonButton expand="block" color="danger" onClick={handleDeleteComment}>
+                                Eliminar comentario
+                            </IonButton>
+                        )}
 
-                        {/* Sección de comentarios */}
                         <h3>Comentarios</h3>
                         <IonList>
                             {comments.length > 0 ? (
                                 comments.map((comment, index) => (
                                     <IonItem key={index}>
                                         <IonLabel>
-                                            <h2>Valoración: {comment.rating}/10</h2>
+                                            <h2>{}</h2>
+                                            <h3>Valoración: {comment.rating}/10</h3>
                                             <p>{comment.comment}</p>
                                             <p><small>{new Date(comment.createdAt).toLocaleDateString()}</small></p>
                                         </IonLabel>
                                     </IonItem>
                                 ))
                             ) : (
-                                <IonText color="medium">
-                                    <p>No hay comentarios disponibles.</p>
-                                </IonText>
+                                <p>No hay comentarios disponibles</p>
                             )}
                         </IonList>
                     </div>
                 ) : (
-                    <IonText color="danger">
-                        <p>Error al cargar los detalles de la película.</p>
-                    </IonText>
+                    <IonText color="danger">Error al cargar los detalles de la película.</IonText>
                 )}
             </IonContent>
         </IonPage>
