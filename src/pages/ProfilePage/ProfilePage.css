@@ -28,3 +28,10 @@
     font-weight: bold; /* Nombre en negrita */
     color: #333; /* Color de texto */
 }
+
+.text-aling{
+    text-align: center;
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+} 

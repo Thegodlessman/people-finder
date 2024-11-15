@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom'; // Importa useHistory
 
-import './Register.css'; // Asegúrate de que el archivo Register.css contiene el CSS que adaptamos
+import './Register.css'; 
 
 
 const Register: React.FC = () => {
@@ -60,71 +60,86 @@ const Register: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>¡Bienvenido a <a className='logo-title' href="/">DePelis</a>!</IonTitle>
+                    <IonTitle class="ion-text-center">DePelis!</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="container"> {/* Añadimos la clase container */}
-                <IonText className="register-title">
-                    <h2>¡Regístrate!</h2>
-                </IonText>
+                <div className='ion-header'>
+                    <h1 className="login-title">Crear cuenta</h1>
+                    <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de peliculas</label>
+                </div>
                 <div className='inputs-container'>
-                    <div className="input-group">
-                        <IonInput 
+                    <div className="input-groups">
+                        <IonInput
+                        label='Nombre' 
+                        fill='solid'
+                        labelPlacement="floating"
+                            className="login-input"
                             placeholder="Ingrese su nombre" 
-                            className="input-group__input"
                             value={name} 
                             onIonChange={(e) => setName(e.detail.value!)} 
                         />
-                    </div>
-                    <div className="input-group">
+
+                    
                         <IonInput 
+                        label='Apellido'
+                        fill='solid'
+                        labelPlacement="floating"
+                            className="login-input"
                             placeholder="Ingrese su apellido" 
-                            className="input-group__input"
                             value={lastName} 
                             onIonChange={(e) => setLastName(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                        label='Usuario'
+                        fill='solid'
+                        labelPlacement="floating"
                             placeholder="Ingrese un nombre de usuario" 
-                            className="input-group__input"
                             value={username} 
                             onIonChange={(e) => setUsername(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                        label='Email'
+                        fill='solid'
+                        labelPlacement="floating"
                             placeholder="Ingrese su correo electrónico" 
-                            className="input-group__input"
                             value={email} 
                             onIonChange={(e) => setEmail(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                        label='Contraseña'
+                        fill='solid'
+                        labelPlacement="floating"
                             placeholder="Ingrese una contraseña" 
                             type="password" 
-                            className="input-group__input"
                             value={password} 
                             onIonChange={(e) => setPassword(e.detail.value!)} 
                         />
                     </div>
                     <div className="input-group">
                         <IonInput 
+                        label='Confirmacion'
+                        fill='solid'
+                        labelPlacement="floating"
                             placeholder="Confirme la contraseña" 
                             type="password" 
-                            className="input-group__input"
                             value={confirmPassword} 
                             onIonChange={(e) => setConfirmPassword(e.detail.value!)} 
                         />
                     </div>
                 </div>
                 <ToastContainer />
-                <div className='button-container'>
-                    <IonButton expand="block" onClick={handleRegister} className="custom-button" fill='clear'>Registrar</IonButton>
-                    <IonText className="ion-text-center">
+                <div>
+                    <IonButton expand='block' onClick={handleRegister}>Registrar</IonButton>
+                    <IonText>
                         <p className='smalltext'>
-                            ¿Ya te has registrado? <IonRouterLink href="/login">Iniciar sesión</IonRouterLink>
+                            ¿Ya tienes cuenta? <IonRouterLink href="/login">Iniciar sesión</IonRouterLink>
                         </p>
                     </IonText>
                 </div>

@@ -8,7 +8,7 @@ const ProfilePage: React.FC = () => {
         <IonPage>
             <IonHeader translucent={true}>
                 <IonToolbar style={{ padding: '7px' }}>
-                    <IonTitle class="ion-text-center">Perfil</IonTitle>
+                    <IonTitle class="text-aling">Perfil</IonTitle>
                 </IonToolbar>
             </IonHeader> 
             <IonContent>
