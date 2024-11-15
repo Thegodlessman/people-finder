@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 import { IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonItem, IonLabel, IonImg, IonThumbnail } from '@ionic/react';
 
 import './MovieList.css'
@@ -8,6 +9,7 @@ const MovieList: React.FC = () => {
     const [movies, setMovies] = useState<any[]>([]);
     const [page, setPage] = useState(1);
     const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
         loadMovies();
@@ -46,7 +48,7 @@ const MovieList: React.FC = () => {
                     : 'https://via.placeholder.com/500x750?text=No+Image'; // Imagen de reserva si no hay poster_path
 
                 return (
-                    <IonItem key={index} className='movies-list-item'>
+                    <IonItem key={index} className='movies-list-item' onClick={() => history.push(`/movie/${movie.id}`)} >
                         <IonThumbnail slot="start">
                             <IonImg src={imageUrl} alt={`Poster de ${movie.title}`} />
                         </IonThumbnail>
