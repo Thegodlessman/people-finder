@@ -34,3 +34,9 @@ ion-button {
 .login-input {
     flex: 1;
  }
+
+ .smalltext {
+    text-align: center;
+  display: block;
+  width: 100%;
+}

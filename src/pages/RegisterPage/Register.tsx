@@ -137,7 +137,7 @@ const Register: React.FC = () => {
                 <ToastContainer />
                 <div>
                     <IonButton expand='block' onClick={handleRegister}>Registrar</IonButton>
-                    <IonText className="ion-text-center">
+                    <IonText>
                         <p className='smalltext'>
                             ¿Ya tienes cuenta? <IonRouterLink href="/login">Iniciar sesión</IonRouterLink>
                         </p>

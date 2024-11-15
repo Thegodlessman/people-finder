@@ -5,7 +5,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import './Login.css';
-import { eye, eyeOutline, lockClosed } from 'ionicons/icons';
 
 
 // commit de sophia
@@ -77,7 +76,7 @@ const Login: React.FC = () => {
                     
                 </div>
                 <IonButton expand='block' onClick={handleLogin}>Iniciar sesión</IonButton>
-                <IonText className="ion-text-center">
+                <IonText>
                     <p className='smalltext'>
                         ¿Aun no tiene cuenta? <a href="/register">Registrate</a>
                     </p>
