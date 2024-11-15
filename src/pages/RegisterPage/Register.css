@@ -8,6 +8,29 @@ ion-button {
 }
 
 .input-group {
-    margin: 15px 25px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    margin-left: 25px;
+    margin-right: 25px; 
     
 }
+
+
+.ion-header {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 25px;
+    margin-right: 25px;  
+}
+
+.input-groups {
+    display: flex;
+    gap: 10px; 
+    flex: 1;
+    margin-left: 25px;
+    margin-right: 25px; 
+    
+}
+.login-input {
+    flex: 1;
+ }

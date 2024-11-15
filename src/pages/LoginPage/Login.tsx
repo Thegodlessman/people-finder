@@ -44,29 +44,30 @@ const Login: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>DePelis!</IonTitle>
+                    <IonTitle class="ion-text-center">DePelis!</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div>
-                    <div className='ion-item'>
-                        <h2>Iniciar Sesion</h2>
+                    <div className="ion-header">
+                        <h1 className="login-title">Iniciar Sesion</h1>
+                        <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de peliculas</label>
                     </div>
-                    <div className='ion-item'>
+                    <div className="ion-item">
                         <IonInput
-                            label="Email" 
-                            fill="solid"
-                            labelPlacement="floating"
+                            label='Email'
+                             fill='solid'
+                        labelPlacement="floating"
                             placeholder="Ingresa tu email"
                             value={loginValue}
                             onIonChange={(e) => setLoginValue(e.detail.value!)}
                         />
                     </div>
                     <div className='ion-item'>
-                        <IonInput 
-                            label="Contraseña"
-                            fill="solid"
-                            labelPlacement="floating"
+                        <IonInput
+                            label='Contraseña'
+                        fill='solid'
+                        labelPlacement="floating"
                             type="password"
                             placeholder="Ingrea tu contraseña"
                             value={password}
