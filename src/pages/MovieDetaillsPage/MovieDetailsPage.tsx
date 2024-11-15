@@ -104,7 +104,7 @@ const MovieDetailsPage: React.FC = () => {
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/" text="Atrás" />
                     </IonButtons>
-                    <IonTitle>Detalles de la Película</IonTitle>
+                    <IonTitle>Detalles</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
@@ -126,7 +126,7 @@ const MovieDetailsPage: React.FC = () => {
                         <h3>Géneros</h3>
                         <IonText color="primary">
                             {movie.genres.map(genre => (
-                                <span key={genre.id} style={{ marginRight: "8px", color: "white" }}>{genre.name}</span>
+                                <span key={genre.id} style={{ marginRight: "8px", color: "black" }}>{genre.name}</span>
                             ))}
                         </IonText>
                         <h3>Resumen</h3>

@@ -18,8 +18,8 @@ const ProfilePage: React.FC = () => {
             </div>
             <div className="image-title">Nombre del Perfil</div>
             <IonCard>
-                <IonList lines="none">                
-                    <IonItem>
+                <IonList lines="none" className="si">                
+                    <IonItem className="ion-items">
                         <IonIcon aria-hidden="true" slot="start" icon={personCircleOutline} />
                         <IonLabel>Mi Perfil</IonLabel>
                     </IonItem>
@@ -27,11 +27,11 @@ const ProfilePage: React.FC = () => {
             </IonCard>
             <IonCard>
             <IonList>                
-                    <IonItem>
+                    <IonItem className="ion-items">
                         <IonIcon aria-hidden="true" icon={heartOutline} slot="start"></IonIcon>
                         <IonLabel>Favoritos</IonLabel>
                     </IonItem>
-                    <IonItem lines="none">
+                    <IonItem className="ion-items" lines="none">
                         <IonIcon aria-hidden="true"  icon={readerOutline} slot="start"></IonIcon>
                         <IonLabel>Historial</IonLabel>
                     </IonItem>
@@ -39,15 +39,15 @@ const ProfilePage: React.FC = () => {
             </IonCard>
             <IonCard>
                 <IonList>                
-                    <IonItem>
+                    <IonItem className="ion-items">
                         <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start"></IonIcon>
                         <IonLabel>Notificaciones</IonLabel>
                     </IonItem>
-                    <IonItem>
+                    <IonItem className="ion-items">
                         <IonIcon aria-hidden="true" icon={cogOutline} slot="start"></IonIcon>
                         <IonLabel>Configuraciones</IonLabel>
                     </IonItem>
-                    <IonItem lines="none">
+                    <IonItem className="ion-items" lines="none">
                         <IonIcon aria-hidden="true" icon={informationCircleOutline} slot="start"></IonIcon>
                         <IonLabel>Informacion</IonLabel>
                     </IonItem>

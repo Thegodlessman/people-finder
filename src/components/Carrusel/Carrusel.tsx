@@ -54,7 +54,7 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
     const displayTitle = categoryTitles[category] || category;
 
     return (
-        <div className="carousel-container">
+        <div>
             <IonItem className="category-title" style={{ color: 'black'}}>{displayTitle}</IonItem>
             {loading ? (
                 <IonSpinner />
@@ -64,8 +64,6 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                         <SwiperSlide key={movie.id}>
                             <IonCard 
                             className="card"
-                            color="light" 
-                            style={{width: '100%'}} 
                             onClick={() => history.push(`/movie/${movie.id}`)} 
                             >
                                 <img 
@@ -74,8 +72,9 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
                                     style={{ width: '100%', borderRadius: '8px 8px 0 0' }}
                                 />
                                 <IonCardHeader>
-                                    <IonCardTitle className="card-title">{movie.title}</IonCardTitle>
                                     <IonCardSubtitle>{new Date(movie.release_date).getFullYear()}</IonCardSubtitle>
+                                    <IonCardTitle className="card-title">{movie.title}</IonCardTitle>
+                                    
                                 </IonCardHeader>
                                 <IonCardContent>
                                     <p className="card-subtitle"><strong>Valoración:</strong> {movie.vote_average} / 10</p>
