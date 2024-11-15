@@ -15,7 +15,7 @@ const Home: React.FC = () => {
       <IonPage id="main-content">
       <IonHeader translucent={true}>
         <IonToolbar style={{ padding: '7px' }}>
-          <IonTitle class="ion-text-center">DePelis</IonTitle>
+          <IonTitle class="ion-text-center">DePelis!</IonTitle>
         </IonToolbar>
       </IonHeader>
       

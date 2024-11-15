@@ -33,7 +33,7 @@ const SearchPage: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Buscar Películas</IonTitle>
+                    <IonTitle className="text-aling">Buscar Películas</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
