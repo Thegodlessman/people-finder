@@ -17,6 +17,8 @@ import {
     IonSegment,
     IonSegmentButton,
     IonInput,
+    IonRefresher,
+    IonRefresherContent
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -206,6 +208,12 @@ const MovieDetailsPage: React.FC = () => {
         fetchComments();
     }, [movieId]);
 
+    const handleRefresh = async (event: CustomEvent) => {
+        await fetchMovieDetails();
+        await fetchComments();
+        event.detail.complete(); // Finalizar la animación del refresco
+    };
+
     return (
         <IonPage>
             <IonHeader>
@@ -217,6 +225,16 @@ const MovieDetailsPage: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
+
+                <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+                    <IonRefresherContent
+                        pullingIcon="chevron-down-circle-outline"
+                        pullingText="Desliza hacia abajo para refrescar"
+                        refreshingSpinner="circles"
+                        refreshingText="Actualizando detalles..."
+                    />
+                </IonRefresher>
+
                 <ToastContainer />
                 {loading ? (
                     <IonSpinner />
@@ -233,7 +251,7 @@ const MovieDetailsPage: React.FC = () => {
                             onClick={isFavorite ? removeFromFavorites : addToFavorites}
                             style={{ marginTop: "1rem" }}
                         >
-                            {isFavorite ? "Eliminar de Favoritos" : "Añadir a Favoritos"}
+                            {isFavorite ? "Eliminar de Guardados" : "Añadir a Guardados"}
                         </IonButton>
                         <IonSegment
                             value={segmentValue}
