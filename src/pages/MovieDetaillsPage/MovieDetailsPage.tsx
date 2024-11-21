@@ -153,7 +153,7 @@ const MovieDetailsPage: React.FC = () => {
             toast.error("La valoración debe estar entre 1 y 10");
             return;
         }
-        
+
         try {
             await axios.post("https://api-notepad-production.up.railway.app/comments", {
                 movieId,
@@ -162,7 +162,7 @@ const MovieDetailsPage: React.FC = () => {
                 comment: userComment,
                 rating: userRating
             });
-    
+
             toast.success("Comentario añadido con éxito", { position: "bottom-center" });
             setUserComment("");
             setUserRating(5);
@@ -206,9 +206,9 @@ const MovieDetailsPage: React.FC = () => {
                     <IonSpinner />
                 ) : movie ? (
                     <div style={{ padding: "1rem" }}>
-                        <img 
-                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                            alt={movie.title} 
+                        <img
+                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            alt={movie.title}
                             style={{ width: "100%", borderRadius: "8px" }}
                         />
                         <h2>{movie.title}</h2>
@@ -230,7 +230,7 @@ const MovieDetailsPage: React.FC = () => {
                         </IonText>
 
                         <IonButton expand="block" onClick={isFavorite ? removeFromFavorites : addToFavorites}>
-                            {isFavorite ? "Colocar en Guardados" : "Quitar de Guardados"}
+                            {isFavorite ? "Quitar de Guardados" : "Colocar en Guardados"}
                         </IonButton>
 
                         <h3>Deja un comentario</h3>
@@ -267,7 +267,7 @@ const MovieDetailsPage: React.FC = () => {
                                 comments.map((comment, index) => (
                                     <IonItem key={index}>
                                         <IonLabel>
-                                            <h2>{}</h2>
+                                            <h2>{ }</h2>
                                             <h3>Valoración: {comment.rating}/10</h3>
                                             <p>{comment.comment}</p>
                                             <p><small>{new Date(comment.createdAt).toLocaleDateString()}</small></p>

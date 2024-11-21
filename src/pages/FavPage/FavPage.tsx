@@ -1,31 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonButton } from "@ionic/react";
+import {
+    IonContent,
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonButton,
+    IonSpinner,
+    IonText
+} from "@ionic/react";
+import jwt_decode from "jwt-decode";
 import axios from 'axios';
 
+// Interfaz para las películas favoritas
 interface Movie {
-    id: string;
+    movieId: string;
     title: string;
-    subtitle: string;
-    content: string;
-    imageUrl: string;
+    posterPath: string;
+    releaseDate: string;
+    voteAverage: number;
+    genres: string[];
 }
 
 const FavPage: React.FC = () => {
     const [favorites, setFavorites] = useState<Movie[]>([]);
+    const [loading, setLoading] = useState(true); // Estado para manejar la carga
+    const [error, setError] = useState<string | null>(null); // Estado para manejar errores
 
+
+    const getUserIdFromToken = (): string | null => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded: any = jwt_decode(token);
+                return decoded.id;
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+            }
+        }
+        return null;
+    };
+
+    const userId = getUserIdFromToken();
     // Cargar favoritos desde el backend al montar el componente
     useEffect(() => {
         const fetchFavorites = async () => {
             try {
-                const response = await axios.get('/api/favorites'); // Cambiar por la ruta correcta de tu endpoint
+                const response = await axios.get(`https://api-notepad-production.up.railway.app/favorites/${userId}`);
                 setFavorites(response.data);
-            } catch (error) {
-                console.error("Error al obtener favoritos", error);
+                setError(null);
+            } catch (err) {
+                setError("No se pudieron cargar tus favoritos. Por favor, inténtalo más tarde.");
+                console.error("Error al obtener favoritos", err);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchFavorites();
     }, []);
+
+    // Eliminar película de favoritos
+    const handleRemoveFavorite = async (movieId: string) => {
+        try {
+            await axios.delete(`https://api-notepad-production.up.railway.app/favorites`, {
+                data: { userId, movieId }, // Enviar userId y movieId como cuerpo de la solicitud
+            });
+            setFavorites(prev => prev.filter(movie => movie.movieId !== movieId));
+        } catch (err) {
+            console.error("Error al eliminar favorito", err);
+            setError("No se pudo eliminar la película de favoritos.");
+        }
+    };
 
     return (
         <IonPage>
@@ -35,26 +89,51 @@ const FavPage: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <IonGrid>
-                    <IonRow>
-                        {favorites.map(movie => (
-                            <IonCol key={movie.id} size="6">
-                                <IonCard color="light">
-                                    <img alt={movie.title} src={movie.imageUrl} />
-                                    <IonCardHeader>
-                                        <IonCardTitle>{movie.title}</IonCardTitle>
-                                        <IonCardSubtitle>{movie.subtitle}</IonCardSubtitle>
-                                    </IonCardHeader>
-                                    <IonCardContent>{movie.content}</IonCardContent>
-                                    {/* Botón para eliminar de favoritos, opcional */}
-                                    <IonButton color="danger" expand="full" >
-                                        Eliminar de Favoritos
-                                    </IonButton>
-                                </IonCard>
-                            </IonCol>
-                        ))}
-                    </IonRow>
-                </IonGrid>
+                {loading ? (
+                    <div style={{ textAlign: 'center', marginTop: '20%' }}>
+                        <IonSpinner name="crescent" />
+                        <IonText>Cargando tus peliculas guardadas...</IonText>
+                    </div>
+                ) : error ? (
+                    <div style={{ textAlign: 'center', marginTop: '20%' }}>
+                        <IonText color="danger">{error}</IonText>
+                    </div>
+                ) : favorites.length === 0 ? (
+                    <div style={{ textAlign: 'center', marginTop: '20%' }}>
+                        <IonText>No tienes películas en guardadas.</IonText>
+                    </div>
+                ) : (
+                    <IonGrid>
+                        <IonRow>
+                            {favorites.map(movie => (
+                                <IonCol key={movie.movieId} size="6" sizeMd="4">
+                                    <IonCard color="light">
+                                        <img
+                                            alt={`Imagen de ${movie.title}`}
+                                            src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
+                                            style={{ height: '200px', objectFit: 'cover' }}
+                                        />
+                                        <IonCardHeader>
+                                            <IonCardTitle>{movie.title}</IonCardTitle>
+                                            <IonCardSubtitle>Lanzamiento: {movie.releaseDate}</IonCardSubtitle>
+                                            <IonCardSubtitle>Valoración: {movie.voteAverage}</IonCardSubtitle>
+                                        </IonCardHeader>
+                                        <IonCardContent>
+                                            Géneros: {movie.genres.join(", ")}
+                                        </IonCardContent>
+                                        <IonButton
+                                            color="danger"
+                                            expand="full"
+                                            onClick={() => handleRemoveFavorite(movie.movieId)}
+                                        >
+                                            Eliminar de Favoritos
+                                        </IonButton>
+                                    </IonCard>
+                                </IonCol>
+                            ))}
+                        </IonRow>
+                    </IonGrid>
+                )}
             </IonContent>
         </IonPage>
     );
