@@ -13,14 +13,18 @@ import {
     IonItem,
     IonLabel,
     IonTextarea,
+    IonList,
+    IonSegment,
+    IonSegmentButton,
     IonInput,
-    IonList
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import jwt_decode from "jwt-decode";
-import 'react-toastify/dist/ReactToastify.css';
+
+import "react-toastify/dist/ReactToastify.css";
+import "./MovieDetailsPage.css";
 
 interface Movie {
     title: string;
@@ -35,6 +39,7 @@ interface Movie {
 
 interface Comment {
     userId: string;
+    username: string;
     comment: string;
     rating: number;
     createdAt: string;
@@ -49,6 +54,7 @@ const MovieDetailsPage: React.FC = () => {
     const [userComment, setUserComment] = useState<string>("");
     const [userRating, setUserRating] = useState<number>(5);
     const [existingComment, setExistingComment] = useState<Comment | null>(null);
+    const [segmentValue, setSegmentValue] = useState<string>("info");
 
     const getUserIdFromToken = (): string | null => {
         const token = localStorage.getItem("token");
@@ -76,13 +82,16 @@ const MovieDetailsPage: React.FC = () => {
         return null;
     };
 
+
     const userId = getUserIdFromToken();
     const username = getUsernameFromToken();
 
     const fetchMovieDetails = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`https://api-notepad-production.up.railway.app/movies/${movieId}`);
+            const response = await axios.get(
+                `https://api-notepad-production.up.railway.app/movies/${movieId}`
+            );
             setMovie(response.data);
             await checkIfFavorite();
         } catch (error) {
@@ -94,9 +103,13 @@ const MovieDetailsPage: React.FC = () => {
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`https://api-notepad-production.up.railway.app/comments/${movieId}`);
+            const response = await axios.get(
+                `https://api-notepad-production.up.railway.app/comments/${movieId}`
+            );
             setComments(response.data);
-            const userComment = response.data.find((comment: Comment) => comment.userId === userId);
+            const userComment = response.data.find(
+                (comment: Comment) => comment.userId === userId
+            );
             if (userComment) setExistingComment(userComment);
         } catch (error) {
             toast.error("Error al cargar comentarios", { position: "bottom-center" });
@@ -105,7 +118,9 @@ const MovieDetailsPage: React.FC = () => {
 
     const checkIfFavorite = async () => {
         try {
-            const response = await axios.get(`https://api-notepad-production.up.railway.app/favorites/${userId}`);
+            const response = await axios.get(
+                `https://api-notepad-production.up.railway.app/favorites/${userId}`
+            );
             setIsFavorite(response.data.some((fav: any) => fav.movieId === movieId));
         } catch (error) {
             console.error("Error checking favorite status:", error);
@@ -123,7 +138,7 @@ const MovieDetailsPage: React.FC = () => {
                 posterPath: movie.poster_path,
                 releaseDate: movie.release_date,
                 voteAverage: movie.vote_average,
-                genres: movie.genres.map(genre => genre.name),
+                genres: movie.genres.map((genre) => genre.name),
             });
             setIsFavorite(true);
             toast.success("Película guardada.", { position: "bottom-center" });
@@ -135,7 +150,7 @@ const MovieDetailsPage: React.FC = () => {
     const removeFromFavorites = async () => {
         try {
             await axios.delete("https://api-notepad-production.up.railway.app/favorites", {
-                data: { userId, movieId }
+                data: { userId, movieId },
             });
             setIsFavorite(false);
             toast.success("Película eliminada de guardados.", { position: "bottom-center" });
@@ -172,6 +187,7 @@ const MovieDetailsPage: React.FC = () => {
         }
     };
 
+
     const handleDeleteComment = async () => {
         try {
             await axios.delete(`https://api-notepad-production.up.railway.app/comments/${movieId}/${userId}`);
@@ -193,11 +209,11 @@ const MovieDetailsPage: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar style={{ padding: "0.8rem" }}>
+                <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/" text="Atrás" />
+                        <IonBackButton defaultHref="/" />
                     </IonButtons>
-                    <IonTitle>Detalles de la Película</IonTitle>
+                    <IonTitle>Detalles</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
@@ -211,76 +227,97 @@ const MovieDetailsPage: React.FC = () => {
                             alt={movie.title}
                             style={{ width: "100%", borderRadius: "8px" }}
                         />
-                        <h2>{movie.title}</h2>
-                        <IonText color="medium">
-                            <p>Estreno: {new Date(movie.release_date).toLocaleDateString()}</p>
-                            <p>Valoración: {movie.vote_average} / 10 ({movie.vote_count} votos)</p>
-                        </IonText>
-
-                        <h3>Géneros</h3>
-                        <IonText color="primary">
-                            {movie.genres.map(genre => (
-                                <span key={genre.id} style={{ marginRight: "8px", color: "white" }}>{genre.name}</span>
-                            ))}
-                        </IonText>
-
-                        <h3>Resumen</h3>
-                        <IonText>
-                            <p>{movie.overview}</p>
-                        </IonText>
-
-                        <IonButton expand="block" onClick={isFavorite ? removeFromFavorites : addToFavorites}>
-                            {isFavorite ? "Quitar de Guardados" : "Colocar en Guardados"}
+                        <IonButton
+                            expand="block"
+                            color={isFavorite ? "danger" : "primary"}
+                            onClick={isFavorite ? removeFromFavorites : addToFavorites}
+                            style={{ marginTop: "1rem" }}
+                        >
+                            {isFavorite ? "Eliminar de Favoritos" : "Añadir a Favoritos"}
                         </IonButton>
+                        <IonSegment
+                            value={segmentValue}
+                            onIonChange={(e) => setSegmentValue(e.detail.value as string)}
+                        >
+                            <IonSegmentButton value="info">
+                                <IonLabel>Info</IonLabel>
+                            </IonSegmentButton>
+                            <IonSegmentButton value="comments">
+                                <IonLabel>Comentarios</IonLabel>
+                            </IonSegmentButton>
+                        </IonSegment>
 
-                        <h3>Deja un comentario</h3>
-                        <IonItem>
-                            <IonTextarea
-                                value={userComment}
-                                onIonChange={(e) => setUserComment(e.detail.value!)}
-                                maxlength={240}
-                                placeholder="Escribe un comentario (máx 240 caracteres)"
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonInput
-                                type="number"
-                                placeholder="Ingrese su valoración"
-                                value={userRating}
-                                onIonChange={(e) => setUserRating(Number(e.detail.value))}
-                                min={1}
-                                max={10}
-                            />
-                        </IonItem>
-                        <IonButton expand="block" onClick={handleAddOrUpdateComment}>
-                            {existingComment ? "Actualizar comentario" : "Enviar comentario"}
-                        </IonButton>
-                        {existingComment && (
-                            <IonButton expand="block" color="danger" onClick={handleDeleteComment}>
-                                Eliminar comentario
-                            </IonButton>
+                        {segmentValue === "info" && (
+                            <div>
+                                <h2>{movie.title}</h2>
+                                <p>
+                                    Estreno: {new Date(movie.release_date).toLocaleDateString()}
+                                </p>
+                                <p>
+                                    Valoración: {movie.vote_average} / 10 ({movie.vote_count}{" "}
+                                    votos)
+                                </p>
+                                <h3>Géneros</h3>
+                                {movie.genres.map((genre) => (
+                                    <span key={genre.id}>{genre.name} </span>
+                                ))}
+                                <h3>Resumen</h3>
+                                <p>{movie.overview}</p>
+                            </div>
                         )}
 
-                        <h3>Comentarios</h3>
-                        <IonList>
-                            {comments.length > 0 ? (
-                                comments.map((comment, index) => (
-                                    <IonItem key={index}>
-                                        <IonLabel>
-                                            <h2>{ }</h2>
-                                            <h3>Valoración: {comment.rating}/10</h3>
-                                            <p>{comment.comment}</p>
-                                            <p><small>{new Date(comment.createdAt).toLocaleDateString()}</small></p>
-                                        </IonLabel>
-                                    </IonItem>
-                                ))
-                            ) : (
-                                <p>No hay comentarios disponibles</p>
-                            )}
-                        </IonList>
+                        {segmentValue === "comments" && (
+                            <div>
+                                <h3>Deja un comentario</h3>
+                                <IonItem>
+                                    <IonTextarea
+                                        value={userComment}
+                                        onIonChange={(e) => setUserComment(e.detail.value!)}
+                                        maxlength={240}
+                                        placeholder="Escribe un comentario (máx 240 caracteres)"
+                                    />
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel>Valoración:</IonLabel>
+                                    <IonInput
+                                        type="number"
+                                        value={userRating}
+                                        onIonChange={(e) => setUserRating(Number(e.detail.value))}
+                                        min={1}
+                                        max={10}
+                                    />
+                                </IonItem>
+                                <IonButton onClick={handleAddOrUpdateComment}>
+                                    {existingComment
+                                        ? "Actualizar Comentario"
+                                        : "Agregar Comentario"}
+                                </IonButton>
+                                {existingComment && (
+                                    <IonButton color="danger" onClick={handleDeleteComment}>
+                                        Eliminar Comentario
+                                    </IonButton>
+                                )}
+                                <h3>Comentarios</h3>
+                                <IonList>
+                                    {comments.length > 0 ? (
+                                        comments.map((comment, index) => (
+                                            <IonItem key={index}>
+                                                <IonLabel>
+                                                    <h2>{comment.username}</h2>
+                                                    <h3>Valoración: {comment.rating}/10</h3>
+                                                    <p>{comment.comment}</p>
+                                                </IonLabel>
+                                            </IonItem>
+                                        ))
+                                    ) : (
+                                        <p>No hay comentarios disponibles</p>
+                                    )}
+                                </IonList>
+                            </div>
+                        )}
                     </div>
                 ) : (
-                    <IonText color="danger">Error al cargar los detalles de la película.</IonText>
+                    <IonText>Error al cargar detalles de la película.</IonText>
                 )}
             </IonContent>
         </IonPage>

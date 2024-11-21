@@ -31,11 +31,9 @@ const SearchPage: React.FC = () => {
 
     return (
         <IonPage>
-            <IonHeader>
                 <IonToolbar>
                     <IonTitle className="text-aling">Buscar Películas</IonTitle>
                 </IonToolbar>
-            </IonHeader>
             <IonContent>
                 <IonSearchbar
                     value={searchTerm}

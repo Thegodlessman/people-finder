@@ -75,7 +75,7 @@ const Login: React.FC = () => {
                     </div>
                     
                 </div>
-                <IonButton expand='block' onClick={handleLogin}>Iniciar sesión</IonButton>
+                <IonButton color='dark' expand='block' onClick={handleLogin}>Iniciar sesión</IonButton>
                 <IonText>
                     <p className='smalltext'>
                         ¿Aun no tiene cuenta? <a href="/register">Registrate</a>
