@@ -26,19 +26,9 @@ import "./ProfilePage.css";
 import { useHistory } from "react-router-dom";
 
 // Firebase imports
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { initializeApp } from "firebase/app";
+// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import { storage } from "../../../firebaseConfig"
 
-const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_MESSAGING_SENDER_ID",
-    appId: "TU_APP_ID",
-};
-
-initializeApp(firebaseConfig);
 
 const ProfilePage: React.FC = () => {
     const [profileImage, setProfileImage] = useState<string>(
@@ -91,21 +81,21 @@ const ProfilePage: React.FC = () => {
 
     // Función para cambiar la foto de perfil
     const handleChangeProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            const storage = getStorage();
-            const storageRef = ref(storage, `profile-images/${file.name}`);
+        // if (event.target.files && event.target.files[0]) {
+        //     const file = event.target.files[0];
+        //     const storage = getStorage();
+        //     const storageRef = ref(storage, `profile-images/${file.name}`);
 
-            try {
-                await uploadBytes(storageRef, file);
-                const url = await getDownloadURL(storageRef);
-                setProfileImage(url);
-                toast.success("Imagen de perfil actualizada correctamente");
-            } catch (error) {
-                console.error("Error al subir la imagen:", error);
-                toast.error("Error al subir la imagen");
-            }
-        }
+        //     try {
+        //         await uploadBytes(storageRef, file);
+        //         const url = await getDownloadURL(storageRef);
+        //         setProfileImage(url);
+        //         toast.success("Imagen de perfil actualizada correctamente");
+        //     } catch (error) {
+        //         console.error("Error al subir la imagen:", error);
+        //         toast.error("Error al subir la imagen");
+        //     }
+        // }
     };
 
     return (
