@@ -10,7 +10,7 @@ import './Login.css';
 // commit de sophia
 
 const Login: React.FC = () => {
-    const [loginValue, setLoginValue] = useState(''); 
+    const [loginValue, setLoginValue] = useState('');
     const [password, setPassword] = useState('');
 
     const history = useHistory();
@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     const handleLogin = async () => {
         try {
             const response = await axios.post('https://api-notepad-production.up.railway.app/login', {
-                loginValue, 
+                loginValue,
                 password
             });
 
@@ -55,8 +55,8 @@ const Login: React.FC = () => {
                     <div className="ion-item">
                         <IonInput
                             label='Email'
-                             fill='solid'
-                        labelPlacement="floating"
+                            fill='solid'
+                            labelPlacement="floating"
                             placeholder="Ingresa tu email"
                             value={loginValue}
                             onIonChange={(e) => setLoginValue(e.detail.value!)}
@@ -65,15 +65,15 @@ const Login: React.FC = () => {
                     <div className='ion-item'>
                         <IonInput
                             label='Contraseña'
-                        fill='solid'
-                        labelPlacement="floating"
+                            fill='solid'
+                            labelPlacement="floating"
                             type="password"
                             placeholder="Ingrea tu contraseña"
                             value={password}
                             onIonChange={(e) => setPassword(e.detail.value!)}
                         />
                     </div>
-                    
+
                 </div>
                 <IonButton color='dark' expand='block' onClick={handleLogin}>Iniciar sesión</IonButton>
                 <IonText>
