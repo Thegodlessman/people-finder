@@ -5,8 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom'; // Importa useHistory
 
-import './Register.css'; 
-
+import './Register.css';
 
 const Register: React.FC = () => {
     const [name, setName] = useState('');
@@ -18,12 +17,45 @@ const Register: React.FC = () => {
 
     const history = useHistory(); // Usamos el hook useHistory para la redirección
 
-    const handleRegister = async () => {
-        // Verificación de confirmación de contraseña
-        if (password !== confirmPassword) {
-            toast.error('Las contraseñas no coinciden', { position: "bottom-center" });
-            return;
+    // Validaciones
+    const validateForm = () => {
+        // Validación de nombre y apellido
+        if (!name || !lastName) {
+            toast.error('El nombre y apellido son requeridos.', { position: "bottom-center" });
+            return false;
         }
+
+        // Validación de nombre de usuario
+        if (!username) {
+            toast.error('El nombre de usuario es requerido.', { position: "bottom-center" });
+            return false;
+        }
+
+        // Validación de correo electrónico (expresión regular)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+            toast.error('Por favor, ingresa un correo electrónico válido.', { position: "bottom-center" });
+            return false;
+        }
+
+        // Validación de la contraseña
+        if (!password || password.length < 6) {
+            toast.error('La contraseña debe tener al menos 6 caracteres.', { position: "bottom-center" });
+            return false;
+        }
+
+        // Validación de confirmación de la contraseña
+        if (password !== confirmPassword) {
+            toast.error('Las contraseñas no coinciden.', { position: "bottom-center" });
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleRegister = async () => {
+        // Validar los campos antes de enviar la solicitud
+        if (!validateForm()) return;
 
         try {
             const response = await axios.post(`https://api-notepad-production.up.railway.app/register`, {
@@ -33,10 +65,9 @@ const Register: React.FC = () => {
                 email,
                 password
             });
+
             console.log("Usuario registrado:", response.data);
-            toast.success("Usuario registrado con éxito", {
-                position: "bottom-center"
-            });
+            toast.success("Usuario registrado con éxito", { position: "bottom-center" });
 
             setTimeout(() => {
                 history.push('/login'); // Redirige a la página de login
@@ -44,13 +75,9 @@ const Register: React.FC = () => {
 
         } catch (error: any) {
             if (error.response && error.response.status === 400) {
-                toast.error(error.response.data.msg, {
-                    position: "bottom-center"
-                });
+                toast.error(error.response.data.msg, { position: "bottom-center" });
             } else {
-                toast.error('Error al registrar usuario', {
-                    position: "bottom-center"
-                });
+                toast.error('Error al registrar usuario', { position: "bottom-center" });
             }
             console.error("Error en registro:", error);
         }
@@ -71,66 +98,64 @@ const Register: React.FC = () => {
                 <div className='inputs-container'>
                     <div className="input-groups">
                         <IonInput
-                        label='Nombre' 
-                        fill='solid'
-                        labelPlacement="floating"
+                            label='Nombre'
+                            fill='solid'
+                            labelPlacement="floating"
                             className="login-input"
-                            placeholder="Ingrese su nombre" 
-                            value={name} 
-                            onIonChange={(e) => setName(e.detail.value!)} 
+                            placeholder="Ingrese su nombre"
+                            value={name}
+                            onIonChange={(e) => setName(e.detail.value!)}
                         />
-
-                    
-                        <IonInput 
-                        label='Apellido'
-                        fill='solid'
-                        labelPlacement="floating"
+                        <IonInput
+                            label='Apellido'
+                            fill='solid'
+                            labelPlacement="floating"
                             className="login-input"
-                            placeholder="Ingrese su apellido" 
-                            value={lastName} 
-                            onIonChange={(e) => setLastName(e.detail.value!)} 
+                            placeholder="Ingrese su apellido"
+                            value={lastName}
+                            onIonChange={(e) => setLastName(e.detail.value!)}
                         />
                     </div>
                     <div className="input-group">
-                        <IonInput 
-                        label='Usuario'
-                        fill='solid'
-                        labelPlacement="floating"
-                            placeholder="Ingrese un nombre de usuario" 
-                            value={username} 
-                            onIonChange={(e) => setUsername(e.detail.value!)} 
+                        <IonInput
+                            label='Usuario'
+                            fill='solid'
+                            labelPlacement="floating"
+                            placeholder="Ingrese un nombre de usuario"
+                            value={username}
+                            onIonChange={(e) => setUsername(e.detail.value!)}
                         />
                     </div>
                     <div className="input-group">
-                        <IonInput 
-                        label='Email'
-                        fill='solid'
-                        labelPlacement="floating"
-                            placeholder="Ingrese su correo electrónico" 
-                            value={email} 
-                            onIonChange={(e) => setEmail(e.detail.value!)} 
+                        <IonInput
+                            label='Email'
+                            fill='solid'
+                            labelPlacement="floating"
+                            placeholder="Ingrese su correo electrónico"
+                            value={email}
+                            onIonChange={(e) => setEmail(e.detail.value!)}
                         />
                     </div>
                     <div className="input-group">
-                        <IonInput 
-                        label='Contraseña'
-                        fill='solid'
-                        labelPlacement="floating"
-                            placeholder="Ingrese una contraseña" 
-                            type="password" 
-                            value={password} 
-                            onIonChange={(e) => setPassword(e.detail.value!)} 
+                        <IonInput
+                            label='Contraseña'
+                            fill='solid'
+                            labelPlacement="floating"
+                            placeholder="Ingrese una contraseña"
+                            type="password"
+                            value={password}
+                            onIonChange={(e) => setPassword(e.detail.value!)}
                         />
                     </div>
                     <div className="input-group">
-                        <IonInput 
-                        label='Confirmacion'
-                        fill='solid'
-                        labelPlacement="floating"
-                            placeholder="Confirme la contraseña" 
-                            type="password" 
-                            value={confirmPassword} 
-                            onIonChange={(e) => setConfirmPassword(e.detail.value!)} 
+                        <IonInput
+                            label='Confirmación'
+                            fill='solid'
+                            labelPlacement="floating"
+                            placeholder="Confirme la contraseña"
+                            type="password"
+                            value={confirmPassword}
+                            onIonChange={(e) => setConfirmPassword(e.detail.value!)}
                         />
                     </div>
                 </div>

@@ -1,21 +1,39 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonText } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonInput, IonButton, IonText } from '@ionic/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from 'react-router-dom';
 import './Login.css';
 
-
-// commit de sophia
-
 const Login: React.FC = () => {
     const [loginValue, setLoginValue] = useState('');
     const [password, setPassword] = useState('');
-
     const history = useHistory();
 
+    // Validación de email con expresión regular
+    const validateEmail = (email: string) => {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return regex.test(email);
+    };
+
     const handleLogin = async () => {
+        // Validar email
+        if (!loginValue || !validateEmail(loginValue)) {
+            toast.error('Por favor ingresa un email válido', {
+                position: "bottom-center"
+            });
+            return;
+        }
+
+        // Validar contraseña
+        if (!password) {
+            toast.error('La contraseña es obligatoria', {
+                position: "bottom-center"
+            });
+            return;
+        }
+
         try {
             const response = await axios.post('https://api-notepad-production.up.railway.app/login', {
                 loginValue,
@@ -29,8 +47,8 @@ const Login: React.FC = () => {
             });
 
             setTimeout(() => {
-                history.push('/home'); // Redirige a la página de login
-            }, 3000); // 3000 ms = 3 segundos
+                history.push('/home'); // Redirige a la página de inicio
+            }, 3000);
 
         } catch (error: any) {
             toast.error('Error al iniciar sesión', {
@@ -50,7 +68,7 @@ const Login: React.FC = () => {
                 <div>
                     <div className="ion-header">
                         <h1 className="login-title">Iniciar Sesion</h1>
-                        <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de peliculas</label>
+                        <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de películas</label>
                     </div>
                     <div className="ion-item">
                         <IonInput
@@ -68,17 +86,16 @@ const Login: React.FC = () => {
                             fill='solid'
                             labelPlacement="floating"
                             type="password"
-                            placeholder="Ingrea tu contraseña"
+                            placeholder="Ingresa tu contraseña"
                             value={password}
                             onIonChange={(e) => setPassword(e.detail.value!)}
                         />
                     </div>
-
                 </div>
                 <IonButton color='dark' expand='block' onClick={handleLogin}>Iniciar sesión</IonButton>
                 <IonText>
                     <p className='smalltext'>
-                        ¿Aun no tiene cuenta? <a href="/register">Registrate</a>
+                        ¿Aún no tienes cuenta? <a href="/register">Regístrate</a>
                     </p>
                 </IonText>
 
