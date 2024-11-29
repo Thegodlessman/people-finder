@@ -25,11 +25,6 @@ import {
 import "./ProfilePage.css";
 import { useHistory } from "react-router-dom";
 
-// Firebase imports
-// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import { storage } from "../../../firebaseConfig"
-
-
 const ProfilePage: React.FC = () => {
     const [profileImage, setProfileImage] = useState<string>(
         "https://live.staticflickr.com/8258/8683827826_7345599262_b.jpg"
@@ -81,21 +76,42 @@ const ProfilePage: React.FC = () => {
 
     // Función para cambiar la foto de perfil
     const handleChangeProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        // if (event.target.files && event.target.files[0]) {
-        //     const file = event.target.files[0];
-        //     const storage = getStorage();
-        //     const storageRef = ref(storage, `profile-images/${file.name}`);
+        if (event.target.files && event.target.files[0]) {
+            const formData = new FormData();
+            formData.append('image', event.target.files[0]);
 
-        //     try {
-        //         await uploadBytes(storageRef, file);
-        //         const url = await getDownloadURL(storageRef);
-        //         setProfileImage(url);
-        //         toast.success("Imagen de perfil actualizada correctamente");
-        //     } catch (error) {
-        //         console.error("Error al subir la imagen:", error);
-        //         toast.error("Error al subir la imagen");
-        //     }
-        // }
+            try {
+                const response = await fetch("https://api-notepad-production.up.railway.app/upload", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    // Si la respuesta no es ok, lanzamos un error con el cuerpo de la respuesta
+                    const errorText = await response.text(); // Leer la respuesta como texto
+                    console.error('Error del servidor:', errorText);
+                    toast.error("Error al subir la imagen");
+                    return;
+                }
+
+                // Si la respuesta es correcta, intentamos obtener el JSON
+                try {
+                    const data = await response.json();
+                    const newProfileImageUrl = data.url;
+                    setProfileImage(newProfileImageUrl); // Actualiza la imagen de perfil
+                    toast.success("Imagen de perfil actualizada correctamente");
+                } catch (jsonError) {
+                    console.error('Error al analizar la respuesta JSON:', jsonError);
+                    toast.error("La respuesta del servidor no es un JSON válido.");
+                }
+            } catch (error) {
+                console.error("Error al subir la imagen:", error);
+                toast.error("Error al subir la imagen");
+            }
+        }
     };
 
     return (
@@ -108,22 +124,6 @@ const ProfilePage: React.FC = () => {
                     <img src={profileImage} className="round-image" alt="Perfil" />
                 </div>
                 <h1 className="image-title" style={{ color: 'white' }}>{profileName}</h1>
-                <IonCard>
-                    <IonList>
-                        <IonItem button onClick={() => history.push("/home")}>
-                            <IonIcon aria-hidden="true" icon={homeOutline} slot="start" />
-                            <IonLabel>Inicio</IonLabel>
-                        </IonItem>
-                        <IonItem button onClick={() => history.push("/home/search")}>
-                            <IonIcon aria-hidden="true" icon={searchOutline} slot="start" />
-                            <IonLabel>Buscar</IonLabel>
-                        </IonItem>
-                        <IonItem button onClick={() => history.push("/home/favorite")}>
-                            <IonIcon aria-hidden="true" icon={heartOutline} slot="start" />
-                            <IonLabel>Guardados</IonLabel>
-                        </IonItem>
-                    </IonList>
-                </IonCard>
 
                 <IonCard>
                     <IonList>
