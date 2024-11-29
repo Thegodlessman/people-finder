@@ -72,10 +72,10 @@ const Login: React.FC = () => {
                     </div>
                     <div className="ion-item">
                         <IonInput
-                            label='Email'
+                            label='Email o Nombre de usuario'
                             fill='solid'
                             labelPlacement="floating"
-                            placeholder="Ingresa tu email"
+                            placeholder="Ingresa tu email o su nombre de usuario"
                             value={loginValue}
                             onIonChange={(e) => setLoginValue(e.detail.value!)}
                         />
