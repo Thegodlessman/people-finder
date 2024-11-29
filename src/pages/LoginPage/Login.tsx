@@ -51,7 +51,7 @@ const Login: React.FC = () => {
             }, 3000);
 
         } catch (error: any) {
-            toast.error('Error al iniciar sesión', {
+            toast.error('El usuario o la contraseña no es correcta, intente de nuevo', {
                 position: "bottom-center"
             });
         }
