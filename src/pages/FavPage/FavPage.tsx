@@ -116,7 +116,7 @@ const FavPage: React.FC = () => {
                                         <img
                                             alt={`Imagen de ${movie.title}`}
                                             src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
-                                            style={{ height: '200px', objectFit: 'cover' }}
+                                            style={{ height: '200px', objectFit: 'cover', width: '100%' }}
                                         />
                                         <IonCardHeader>
                                             <IonCardTitle>{movie.title}</IonCardTitle>
