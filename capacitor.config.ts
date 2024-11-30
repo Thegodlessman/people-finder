@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'ionic.app.base',
+  appId: 'DePelis',
   appName: 'DePelis!',
   webDir: 'dist',
   bundledWebRuntime: false,

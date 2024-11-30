@@ -39,6 +39,7 @@ const ProfilePage: React.FC = () => {
         if (token) {
             const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decodificar token
             setProfileName(decodedToken.fullName || "Nombre del Perfil");
+            setProfileImage(decodedToken.profileImage || profileImage); // Cargar imagen de perfil desde el token si existe
         }
     }, []);
 
@@ -47,6 +48,20 @@ const ProfilePage: React.FC = () => {
         localStorage.removeItem("token");
         history.push("/login");
     };
+
+    // Función para extraer el userId del token
+    const getUserIdFromToken = () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("No token found");
+        }
+        console.log(token);
+
+        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decodificar el payload del token
+        console.log(decodedToken)
+        return decodedToken.id;  // Asegúrate de que el userId esté en el token
+    };
+
 
     // Función para eliminar la cuenta
     const handleDeleteAccount = async () => {
@@ -74,13 +89,17 @@ const ProfilePage: React.FC = () => {
         }
     };
 
-    // Función para cambiar la foto de perfil
+    // Función para cambiar la imagen de perfil
     const handleChangeProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const formData = new FormData();
             formData.append('image', event.target.files[0]);
 
+            // Agregar el userId al formData
             try {
+                const userId = getUserIdFromToken();  // Obtener el userId del token
+                formData.append('userId', userId);    // Agregar userId a los datos
+
                 const response = await fetch("https://api-notepad-production.up.railway.app/upload", {
                     method: "POST",
                     body: formData,
@@ -100,7 +119,7 @@ const ProfilePage: React.FC = () => {
                 // Si la respuesta es correcta, intentamos obtener el JSON
                 try {
                     const data = await response.json();
-                    const newProfileImageUrl = data.url;
+                    const newProfileImageUrl = data.profileImage;  // Asumiendo que el endpoint responde con profileImage
                     setProfileImage(newProfileImageUrl); // Actualiza la imagen de perfil
                     toast.success("Imagen de perfil actualizada correctamente");
                 } catch (jsonError) {
@@ -108,11 +127,12 @@ const ProfilePage: React.FC = () => {
                     toast.error("La respuesta del servidor no es un JSON válido.");
                 }
             } catch (error) {
-                console.error("Error al subir la imagen:", error);
+                console.error("Error al obtener userId o subir la imagen:", error);
                 toast.error("Error al subir la imagen");
             }
         }
     };
+
 
     return (
         <IonPage>
