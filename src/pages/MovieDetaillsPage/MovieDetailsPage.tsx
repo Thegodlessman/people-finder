@@ -57,6 +57,7 @@ const MovieDetailsPage: React.FC = () => {
     const [userRating, setUserRating] = useState<number>(5);
     const [existingComment, setExistingComment] = useState<Comment | null>(null);
     const [segmentValue, setSegmentValue] = useState<string>("info");
+    const [averageRating, setAverageRating] = useState<number | null>(null);
 
     const getUserIdFromToken = (): string | null => {
         const token = localStorage.getItem("token");
@@ -203,9 +204,18 @@ const MovieDetailsPage: React.FC = () => {
         }
     };
 
+    const fetchAverageRating = async () => {
+        try {
+            const response = await axios.get(`https://api-notepad-production.up.railway.app/movie/${movieId}/average-rating`);
+            setAverageRating(response.data.averageRating);
+        } catch (error) {
+            console.error("Error al obtener la valoración promedio:", error);
+        }
+    }
     useEffect(() => {
         fetchMovieDetails();
         fetchComments();
+        fetchAverageRating();
     }, [movieId]);
 
     const handleRefresh = async (event: CustomEvent) => {
@@ -271,10 +281,7 @@ const MovieDetailsPage: React.FC = () => {
                                 <p>
                                     Estreno: {new Date(movie.release_date).toLocaleDateString()}
                                 </p>
-                                <p>
-                                    Valoración: {movie.vote_average} / 10 ({movie.vote_count}{" "}
-                                    votos)
-                                </p>
+                                <p>Valoración de los comentarios: {averageRating ? averageRating.toFixed(1) : "Sin valoración"}</p>
                                 <h3>Géneros</h3>
                                 {movie.genres.map((genre) => (
                                     <span key={genre.id}>{genre.name} </span>

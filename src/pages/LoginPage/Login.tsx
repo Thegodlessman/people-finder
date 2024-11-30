@@ -18,13 +18,6 @@ const Login: React.FC = () => {
     };
 
     const handleLogin = async () => {
-        // Validar email
-        if (!loginValue || !validateEmail(loginValue)) {
-            toast.error('Por favor ingresa un email válido', {
-                position: "bottom-center"
-            });
-            return;
-        }
 
         // Validar contraseña
         if (!password) {
