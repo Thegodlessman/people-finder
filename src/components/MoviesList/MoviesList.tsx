@@ -1,72 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useHistory } from "react-router-dom";
-import { IonInfiniteScroll, IonInfiniteScrollContent, IonList, IonItem, IonLabel, IonImg, IonThumbnail } from '@ionic/react';
+import { IonList, IonItem, IonLabel, IonImg, IonThumbnail } from '@ionic/react';
+import './MovieList.css';
 
-import './MovieList.css'
+interface Movie {
+    id: number;
+    title: string;
+    poster_path?: string;
+    [key: string]: any;
+}
 
-const MovieList: React.FC = () => {
-    const [movies, setMovies] = useState<any[]>([]);
-    const [page, setPage] = useState(1);
-    const [isInfiniteDisabled, setIsInfiniteDisabled] = useState(false);
+interface MovieListProps {
+    movies?: Movie[]; // Ahora es opcional
+}
+
+const MovieList: React.FC<MovieListProps> = ({ movies = [] }) => { // Valor por defecto para evitar errores
     const history = useHistory();
 
-    useEffect(() => {
-        loadMovies();
-    }, [page]);
-
-    const loadMovies = async () => {
-        try {
-            const response = await axios.get(`https://api-notepad-production.up.railway.app/movies`, { params: { page } });
-            const newMovies = response.data.peliculas;
-
-            // Añadir las nuevas películas a la lista existente
-            setMovies((prevMovies) => [...prevMovies, ...newMovies]);
-
-            // Deshabilitar el infinite scroll si no hay más páginas
-            if (page >= response.data.total_pages) {
-                setIsInfiniteDisabled(true);
-            }
-        } catch (error) {
-            console.error('Error al cargar las películas:', error);
-        }
-    };
-
-    const loadMoreMovies = (event: CustomEvent<void>) => {
-        setPage((prevPage) => prevPage + 1);
-        setTimeout(() => {
-            (event.target as HTMLIonInfiniteScrollElement).complete();
-        }, 500);
-    };
+    if (!movies || movies.length === 0) {
+        return <p>No se encontraron películas.</p>;
+    }
 
     return (
         <IonList>
-            {movies.map((movie, index) => {
-                // Verificar y construir la URL de la imagen
-                const imageUrl = movie.poster_path 
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`// comentario
-                    : 'https://via.placeholder.com/500x750?text=No+Image'; // Imagen de reserva si no hay poster_path
+            {movies.map((movie) => {
+                const imageUrl = movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : 'https://via.placeholder.com/500x750?text=No+Image';
 
                 return (
-                    <IonItem key={index} className='movies-list-item' onClick={() => history.push(`/movie/${movie.id}`)} >
+                    <IonItem
+                        key={movie.id} // Usamos `movie.id` como clave única
+                        className='movies-list-item'
+                        onClick={() => history.push(`/movie/${movie.id}`)}
+                    >
                         <IonThumbnail slot="start">
                             <IonImg src={imageUrl} alt={`Poster de ${movie.title}`} />
                         </IonThumbnail>
-                        <IonLabel><h2>{movie.title}</h2></IonLabel>
+                        <IonLabel>
+                            <h2>{movie.title}</h2>
+                        </IonLabel>
                     </IonItem>
                 );
             })}
-
-            <IonInfiniteScroll
-                threshold="100px"
-                disabled={isInfiniteDisabled}
-                onIonInfinite={(e) => loadMoreMovies(e)}
-            >
-                <IonInfiniteScrollContent
-                    loadingSpinner="bubbles"
-                    loadingText="Cargando más películas..."
-                ></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
         </IonList>
     );
 };

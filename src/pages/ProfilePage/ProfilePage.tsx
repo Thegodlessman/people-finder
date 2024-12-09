@@ -1,62 +1,185 @@
-import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonCard, IonItem, IonIcon, IonLabel, IonList } from "@ionic/react"
-import { personCircleOutline, call, readerOutline, cogOutline, informationCircleOutline, heartOutline, notificationsOutline } from "ionicons/icons"
-import './ProfilePage.css';
-
+import React, { useState, useEffect } from "react";
+import {
+    IonContent,
+    IonPage,
+    IonToolbar,
+    IonTitle,
+    IonCard,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonList,
+    IonButton,
+} from "@ionic/react";
+import { toast, ToastContainer } from "react-toastify";
+import {
+    personCircleOutline,
+    cogOutline,
+    informationCircleOutline,
+    heartOutline,
+    searchOutline,
+    homeOutline,
+    trashBinOutline,
+    logOutOutline,
+} from "ionicons/icons";
+import "./ProfilePage.css";
+import { useHistory } from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
-    return(
-        <IonPage>
-                <IonToolbar style={{ padding: '7px' }}>
-                    <IonTitle class="text-aling">Perfil</IonTitle>
-                </IonToolbar>
-            <IonContent>
-            <div className="image-container">
-                    <img src="https://live.staticflickr.com/8258/8683827826_7345599262_b.jpg" className="round-image" />
-                    
-            </div>
-            <div className="image-title">Nombre del Perfil</div>
-            <IonCard>
-                <IonList lines="none" className="si">                
-                    <IonItem className="ion-items">
-                        <IonIcon aria-hidden="true" slot="start" icon={personCircleOutline} />
-                        <IonLabel>Mi Perfil</IonLabel>
-                    </IonItem>
-                </IonList>
-            </IonCard>
-            <IonCard>
-            <IonList>                
-                    <IonItem className="ion-items">
-                        <IonIcon aria-hidden="true" icon={heartOutline} slot="start"></IonIcon>
-                        <IonLabel>Favoritos</IonLabel>
-                    </IonItem>
-                    <IonItem className="ion-items" lines="none">
-                        <IonIcon aria-hidden="true"  icon={readerOutline} slot="start"></IonIcon>
-                        <IonLabel>Historial</IonLabel>
-                    </IonItem>
-            </IonList>
-            </IonCard>
-            <IonCard>
-                <IonList>                
-                    <IonItem className="ion-items">
-                        <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start"></IonIcon>
-                        <IonLabel>Notificaciones</IonLabel>
-                    </IonItem>
-                    <IonItem className="ion-items">
-                        <IonIcon aria-hidden="true" icon={cogOutline} slot="start"></IonIcon>
-                        <IonLabel>Configuraciones</IonLabel>
-                    </IonItem>
-                    <IonItem className="ion-items" lines="none">
-                        <IonIcon aria-hidden="true" icon={informationCircleOutline} slot="start"></IonIcon>
-                        <IonLabel>Informacion</IonLabel>
-                    </IonItem>
-                </IonList>
-            </IonCard>
+    const [profileImage, setProfileImage] = useState<string>(
+        "https://live.staticflickr.com/8258/8683827826_7345599262_b.jpg"
+    );
+    const [profileName, setProfileName] = useState<string>("Nombre del Perfil");
+    const [showConfig, setShowConfig] = useState(false);
+    const history = useHistory();
 
-            <IonIcon aria-hidden="true" icon={call} slot="start"></IonIcon>
-            <a className="logout-container">Cerrar Sesion</a>
-            </IonContent>           
+    // Cargar nombre de perfil desde el token
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decodificar token
+            setProfileName(decodedToken.fullName || "Nombre del Perfil");
+            setProfileImage(decodedToken.profileImage || profileImage); // Cargar imagen de perfil desde el token si existe
+        }
+    }, []);
+
+    // Función para cerrar sesión
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        history.push("/login");
+    };
+
+    // Función para extraer el userId del token
+    const getUserIdFromToken = () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("No token found");
+        }
+        console.log(token);
+
+        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decodificar el payload del token
+        console.log(decodedToken)
+        return decodedToken.id;  // Asegúrate de que el userId esté en el token
+    };
+
+
+    // Función para eliminar la cuenta
+    const handleDeleteAccount = async () => {
+        try {
+            const response = await fetch("https://api-notepad-production.up.railway.app/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            if (response.ok) {
+                toast.success("Cuenta eliminada exitosamente", {
+                    position: "bottom-center",
+                });
+                handleLogout();
+            } else {
+                toast.error("Hubo un error al intentar borrar la cuenta", {
+                    position: "bottom-center",
+                });
+            }
+        } catch (error) {
+            console.error("Error al eliminar la cuenta:", error);
+        }
+    };
+
+    // Función para cambiar la imagen de perfil
+    const handleChangeProfileImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const formData = new FormData();
+            formData.append('image', event.target.files[0]);
+
+            // Agregar el userId al formData
+            try {
+                const userId = getUserIdFromToken();  // Obtener el userId del token
+                formData.append('userId', userId);    // Agregar userId a los datos
+
+                const response = await fetch("https://api-notepad-production.up.railway.app/upload", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    // Si la respuesta no es ok, lanzamos un error con el cuerpo de la respuesta
+                    const errorText = await response.text(); // Leer la respuesta como texto
+                    console.error('Error del servidor:', errorText);
+                    toast.error("Error al subir la imagen");
+                    return;
+                }
+
+                // Si la respuesta es correcta, intentamos obtener el JSON
+                try {
+                    const data = await response.json();
+                    const newProfileImageUrl = data.profileImage;  // Asumiendo que el endpoint responde con profileImage
+                    setProfileImage(newProfileImageUrl); // Actualiza la imagen de perfil
+                    toast.success("Imagen de perfil actualizada correctamente");
+                } catch (jsonError) {
+                    console.error('Error al analizar la respuesta JSON:', jsonError);
+                    toast.error("La respuesta del servidor no es un JSON válido.");
+                }
+            } catch (error) {
+                console.error("Error al obtener userId o subir la imagen:", error);
+                toast.error("Error al subir la imagen");
+            }
+        }
+    };
+
+
+    return (
+        <IonPage>
+            <IonToolbar style={{ padding: "7px" }}>
+                <IonTitle className="text-align">Perfil</IonTitle>
+            </IonToolbar>
+            <IonContent>
+                <div className="image-container">
+                    <img src={profileImage} className="round-image" alt="Perfil" />
+                </div>
+                <h1 className="image-title" style={{ color: 'white' }}>{profileName}</h1>
+
+                <IonCard>
+                    <IonList>
+                        <IonItem button onClick={() => setShowConfig(!showConfig)}>
+                            <IonIcon aria-hidden="true" icon={cogOutline} slot="start" />
+                            <IonLabel>Configuraciones</IonLabel>
+                        </IonItem>
+                        {showConfig && (
+                            <div style={{ padding: "10px" }}>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleChangeProfileImage}
+                                    style={{ marginBottom: "10px" }}
+                                />
+                                <IonButton expand="block" color="danger" onClick={handleDeleteAccount}>
+                                    <IonIcon slot="start" icon={trashBinOutline} />
+                                    Eliminar Cuenta
+                                </IonButton>
+                            </div>
+                        )}
+                        <IonItem button onClick={() => history.push("/info")}>
+                            <IonIcon aria-hidden="true" icon={informationCircleOutline} slot="start" />
+                            <IonLabel>Información</IonLabel>
+                        </IonItem>
+                    </IonList>
+                </IonCard>
+
+                <IonButton expand="block" color="primary" onClick={handleLogout}>
+                    <IonIcon slot="start" icon={logOutOutline} />
+                    Cerrar Sesión
+                </IonButton>
+                <ToastContainer />
+            </IonContent>
         </IonPage>
-    )
-}
-    
-export default ProfilePage
+    );
+};
+
+export default ProfilePage;

@@ -55,26 +55,26 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ category }) => {
 
     return (
         <div>
-            <IonItem className="category-title" style={{ color: 'black'}}>{displayTitle}</IonItem>
+            <IonItem className="category-title" style={{ color: 'white' }}>{displayTitle}</IonItem>
             {loading ? (
                 <IonSpinner />
             ) : (
                 <Swiper slidesPerView={2} spaceBetween={10} centeredSlides autoplay={{ delay: 3000 }}>
                     {movies.map((movie) => (
                         <SwiperSlide key={movie.id}>
-                            <IonCard 
-                            className="card"
-                            onClick={() => history.push(`/movie/${movie.id}`)} 
+                            <IonCard
+                                className="card"
+                                onClick={() => history.push(`/movie/${movie.id}`)}
                             >
-                                <img 
-                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                                    alt={movie.title} 
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                    alt={movie.title}
                                     style={{ width: '100%', borderRadius: '8px 8px 0 0' }}
                                 />
                                 <IonCardHeader>
                                     <IonCardSubtitle>{new Date(movie.release_date).getFullYear()}</IonCardSubtitle>
                                     <IonCardTitle className="card-title">{movie.title}</IonCardTitle>
-                                    
+
                                 </IonCardHeader>
                             </IonCard>
                         </SwiperSlide>
