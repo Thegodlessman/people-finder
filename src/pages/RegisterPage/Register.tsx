@@ -80,17 +80,54 @@ const Register: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent className="container">
-                <h1 className="login-title">Crear cuenta</h1>
-                <IonInput placeholder="Nombre" value={name} onIonChange={(e) => setName(e.detail.value!)} />
-                <IonInput placeholder="Apellido" value={lastName} onIonChange={(e) => setLastName(e.detail.value!)} />
-                <IonInput placeholder="Usuario" value={username} onIonChange={(e) => setUsername(e.detail.value!)} />
-                <IonInput placeholder="Correo" value={email} onIonChange={(e) => setEmail(e.detail.value!)} />
-                <IonInput type="password" placeholder="Contraseña" value={password} onIonChange={(e) => setPassword(e.detail.value!)} />
-                <IonInput type="password" placeholder="Confirmar contraseña" value={confirmPassword} onIonChange={(e) => setConfirmPassword(e.detail.value!)} />
-                <input type="file" onChange={handleImageChange} />
+                <div className='ion-header'>
+                    <h1 className="login-title">Crear cuenta</h1>
+                    <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de peliculas</label>
+                </div>
+                <div className='inputs-container'>
+                    <div className="input-groups">
+                        <IonInput label='Nombre' fill='solid'
+                            labelPlacement="floating"
+                        value={name} onIonChange={(e) => setName(e.detail.value!)} />
+                        <IonInput label="Apellido" fill='solid'
+                            labelPlacement="floating"
+                        value={lastName} onIonChange={(e) => setLastName(e.detail.value!)} />
+                    </div>
+
+                    <div className="input-group">
+                        <IonInput label="Usuario" fill='solid'
+                            labelPlacement="floating" value={username} onIonChange={(e) => setUsername(e.detail.value!)} />
+                    </div>
+                    
+                    <div className="input-group">
+                        <IonInput label="Correo" fill='solid'
+                            labelPlacement="floating" value={email} onIonChange={(e) => setEmail(e.detail.value!)} />
+                    </div>
+                    
+                    <div className="input-group">
+                        <IonInput type="password" fill='solid'
+                            labelPlacement="floating" label="Contraseña" value={password} onIonChange={(e) => setPassword(e.detail.value!)} />
+                    </div>
+
+                    <div className="input-group">
+                        <IonInput type="password" fill='solid'
+                            labelPlacement="floating" label="Confirmar contraseña" value={confirmPassword} onIonChange={(e) => setConfirmPassword(e.detail.value!)} />
+                    </div>
+                    
+                    <div  className="input-group">
+                        <input type="file" onChange={handleImageChange} />
+                    </div>
+                    
+                </div>
                 <ToastContainer />
-                <IonButton expand="block" onClick={handleRegister}>Registrar</IonButton>
-                <IonText>¿Ya tienes cuenta? <IonRouterLink href="/login">Inicia sesión</IonRouterLink></IonText>
+                <div>
+                    <IonButton color='dark' expand='block' onClick={handleRegister}>Registrar</IonButton>
+                    <IonText>
+                        <p className='smalltext'>
+                            ¿Ya tienes cuenta? <IonRouterLink href="/login">Iniciar sesión</IonRouterLink>
+                        </p>
+                    </IonText>
+                </div>
             </IonContent>
         </IonPage>
     );

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './FindFriendsPage.css';
 
+import defaultImage from '../../assets/images/default-profile.png'
 
 const FindFriendsPage: React.FC = () => {
     const [users, setUsers] = useState<any[]>([]);
@@ -20,7 +21,6 @@ const FindFriendsPage: React.FC = () => {
                     return;
                 }
 
-                // Decodificar el token para obtener el userId
                 const decodedToken: any = jwtDecode(token);
                 const userId = decodedToken.id;
 
@@ -81,11 +81,14 @@ const FindFriendsPage: React.FC = () => {
                         onSwipe={(dir) => handleSwipe(dir, currentUser)}
                         preventSwipe={["up", "down"]}
                     >
-                        <div className="card" style={{ backgroundImage: `url(${currentUser.profileImage || '/default-profile.png'})` }}>
+                        <div className="card">
+                            <img
+                                className="profile-image"
+                                src={currentUser.profileImage || defaultImage}
+                                alt={`${currentUser.name} ${currentUser.lastName}`}
+                            />
                             <div className="card-info">
-                                <h2>
-                                    {currentUser.name} {currentUser.lastName}
-                                </h2>
+                                <h2 style={{ color: "black" }}>{currentUser.name} {currentUser.lastName}</h2>
                                 <p>@{currentUser.username}</p>
                             </div>
                         </div>
