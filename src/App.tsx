@@ -73,9 +73,6 @@ const AppContent: React.FC = () => {
           <Redirect to="/login" />
         </Route>
       </IonRouterOutlet>
-
-      {/* Renderiza TabBar solo si showTabBar es true */}
-      {showTabBar && <TabBar />}
     </IonTabs>
   );
 };

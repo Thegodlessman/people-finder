@@ -73,7 +73,7 @@ const TabBar: React.FC = () => {
                 <IonIcon slot="icon-only" icon={personOutline} />
               </IonMenuButton>
             </IonButtons>
-            <IonTitle> <a href='/home'> people finder </a></IonTitle>
+            <IonTitle> <a href='/finder'> people finder </a></IonTitle>
             <IonButtons slot='end'>
               <IonButton href="/home/favorite">
                 <IonIcon slot="icon-only" icon={chatbubblesOutline} />
@@ -81,7 +81,6 @@ const TabBar: React.FC = () => {
             </IonButtons>
           </IonToolbar>
         </IonHeader>
-
       </IonPage>
     </>
   );
