@@ -1,0 +1,29 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between; /* Espaciado entre botones */
+    position: relative;
+}
+
+.left-button {
+    position: absolute;
+    left: 10px; /* Ajusta según tu diseño */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.center-button {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--ion-color-primary);
+    border-radius: 50%; /* Para hacerlo circular */
+}
+
+.right-button {
+    position: absolute;
+    right: 10px; /* Ajusta según tu diseño */
+    top: 50%;
+    transform: translateY(-50%);
+}
+

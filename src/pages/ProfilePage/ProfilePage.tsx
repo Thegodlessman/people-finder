@@ -27,7 +27,7 @@ import { useHistory } from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
     const [profileImage, setProfileImage] = useState<string>(
-        "https://live.staticflickr.com/8258/8683827826_7345599262_b.jpg"
+        "../../assets/images/default-profile.png"
     );
     const [profileName, setProfileName] = useState<string>("Nombre del Perfil");
     const [showConfig, setShowConfig] = useState(false);
@@ -55,10 +55,7 @@ const ProfilePage: React.FC = () => {
         if (!token) {
             throw new Error("No token found");
         }
-        console.log(token);
-
         const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decodificar el payload del token
-        console.log(decodedToken)
         return decodedToken.id;  // Asegúrate de que el userId esté en el token
     };
 
