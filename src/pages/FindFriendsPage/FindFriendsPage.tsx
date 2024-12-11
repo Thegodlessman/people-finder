@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import TinderCard from 'react-tinder-card';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './FindFriendsPage.css';
 
-import defaultImage from '../../assets/images/default-profile.png'
+import defaultImage from '../../assets/images/default-profile.png';
+import { IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonList, IonItem, IonLabel } from '@ionic/react';
+import { personAddOutline } from 'ionicons/icons';
 
 const FindFriendsPage: React.FC = () => {
     const [users, setUsers] = useState<any[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [friendRequests, setFriendRequests] = useState<any[]>([]);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -31,8 +35,16 @@ const FindFriendsPage: React.FC = () => {
                 );
 
                 setUsers(response.data);
+
+                const friendRequestResponse = await axios.post(
+                    'https://api-notepad-production.up.railway.app/friend-requests',
+                    { userId: userId },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                setFriendRequests(friendRequestResponse.data);
             } catch (error) {
-                console.error('Error fetching users:', error);
+                console.error('Error fetching data:', error);
             }
         };
 
@@ -45,9 +57,20 @@ const FindFriendsPage: React.FC = () => {
         if (direction === 'right') {
             try {
                 const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No token found');
+                    return;
+                }
+
+                const decodedToken: any = jwtDecode(token);
+                const userId = decodedToken.id;
+
                 await axios.post(
-                    '/api/friend-request',
-                    { targetUserId: user._id },
+                    'https://api-notepad-production.up.railway.app/friend-request/send',
+                    {
+                        targetUserId: user._id,
+                        userId: userId
+                    },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 toast.success(`Solicitud de amistad enviada a ${user.name}`, {
@@ -66,6 +89,66 @@ const FindFriendsPage: React.FC = () => {
         }
 
         setCurrentIndex((prevIndex) => prevIndex + 1);
+    };
+
+    const handleAcceptRequest = async (requestUserId: string) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            const decodedToken: any = jwtDecode(token);
+            const userId = decodedToken.id;
+
+            await axios.post(
+                'https://api-notepad-production.up.railway.app/friend-request/accept',
+                { userId, requestUserId },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            toast.success('Solicitud de amistad aceptada', {
+                position: 'bottom-center',
+            });
+
+            setFriendRequests(friendRequests.filter((req) => req._id !== requestUserId));
+        } catch (error) {
+            console.error('Error accepting friend request:', error);
+            toast.error('Error al aceptar la solicitud de amistad', {
+                position: 'bottom-center',
+            });
+        }
+    };
+
+    const handleRejectRequest = async (requestUserId: string) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            const decodedToken: any = jwtDecode(token);
+            const userId = decodedToken.id;
+
+            await axios.post(
+                'https://api-notepad-production.up.railway.app/friend-request/reject',
+                { requestUserId, userId },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            toast.info('Solicitud de amistad rechazada', {
+                position: 'bottom-center',
+            });
+
+            setFriendRequests(friendRequests.filter((req) => req._id !== requestUserId));
+        } catch (error) {
+            console.error('Error rejecting friend request:', error);
+            toast.error('Error al rechazar la solicitud de amistad', {
+                position: 'bottom-center',
+            });
+        }
     };
 
     const currentUser = users[currentIndex];
@@ -97,6 +180,31 @@ const FindFriendsPage: React.FC = () => {
                     <div className="no-more-users">¡No hay más usuarios para mostrar!</div>
                 )}
             </div>
+
+            <IonFab vertical="bottom" horizontal="end" slot="fixed">
+                <IonFabButton onClick={() => setShowModal(true)}>
+                    <IonIcon icon={personAddOutline} />
+                </IonFabButton>
+            </IonFab>
+
+            <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
+                <div className="modal-content">
+                    <h2>Solicitudes de Amistad</h2>
+                    <IonList>
+                        {friendRequests.map((request) => (
+                            <IonItem key={request._id}>
+                                <IonLabel>{request.name} {request.lastName} @{request.username}</IonLabel>
+                                <IonButton color="success" onClick={() => handleAcceptRequest(request._id)}>Aceptar</IonButton>
+                                <IonButton color="danger" onClick={() => handleRejectRequest(request._id)}>Rechazar</IonButton>
+                            </IonItem>
+                        ))}
+                    </IonList>
+                    <IonButton onClick={() => setShowModal(false)}>Cerrar</IonButton>
+                    <ToastContainer />
+                </div>
+            </IonModal>
+
+            <ToastContainer />
         </div>
     );
 };

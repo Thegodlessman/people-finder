@@ -40,7 +40,7 @@ const Login: React.FC = () => {
             });
 
             setTimeout(() => {
-                history.push('/home'); // Redirige a la página de inicio
+                history.push('/finder'); // Redirige a la página de inicio
             }, 3000);
 
         } catch (error: any) {
