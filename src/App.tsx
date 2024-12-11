@@ -39,6 +39,7 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import FindFriendsPage from './pages/FindFriendsPage/FindFriendsPage';
 
 setupIonicReact();
 
@@ -66,6 +67,7 @@ const AppContent: React.FC = () => {
       <IonRouterOutlet>
         <Route path="/register" component={Register} exact />
         <Route path="/login" component={Login} />
+        <Route path="/finder" component={FindFriendsPage}></Route>
         <Route path="/home/profile" component={ProfilePage} />
         <Route exact path="/">
           <Redirect to="/login" />

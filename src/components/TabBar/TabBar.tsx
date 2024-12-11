@@ -6,7 +6,7 @@ const TabBar: React.FC = () => {
         <IonTabBar slot="bottom">
             <IonTabButton tab="home" href="/home">
                 <IonIcon icon={homeOutline} />
-                <IonLabel>Inicio</IonLabel>
+                <IonLabel>Matches</IonLabel>
             </IonTabButton>
             <IonTabButton tab="search" href="/home/search">
                 <IonIcon icon={searchOutline} />
