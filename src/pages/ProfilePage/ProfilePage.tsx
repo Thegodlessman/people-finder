@@ -218,6 +218,7 @@ const ProfilePage: React.FC = () => {
                         <img src={profileImage} className="round-image" alt="Perfil" />
                     </div>
                     <h1 className="image-title" style={{ color: 'white' }}>{profileName}</h1>
+                    <h3 className="image-title" style={{ color: 'grey', marginBottom: "20px" }}>@{decodedToken.username}</h3>
 
                     <IonCard>
                         <IonList>
