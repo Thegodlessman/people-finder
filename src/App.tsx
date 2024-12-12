@@ -9,6 +9,8 @@ import TabBar from './components/TabBar/TabBar';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { AuthProvider } from './components/AuthContext.tsx/AuthContext';
+import ChatsPage from './pages/ChatsPage/ChatsPage';
+import ChatPage from './pages/ChatPage/ChatPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -57,10 +59,6 @@ const App: React.FC = () => {
 
 // Crea el componente AppContent para aislar el uso de useLocation dentro del contexto correcto
 const AppContent: React.FC = () => {
-  const location = useLocation();
-
-  const hideTabBarRoutes = ['/register', '/login', '/register-info'];
-  const showTabBar = !hideTabBarRoutes.includes(location.pathname);
 
   return (
     <IonTabs>
@@ -69,6 +67,8 @@ const AppContent: React.FC = () => {
         <Route path="/login" component={Login} />
         <Route path="/finder" component={FindFriendsPage}></Route>
         <Route path="/home/profile" component={ProfilePage} />
+        <Route path="/chats" component={ChatsPage} />
+        <Route path="/chat/:chatId" component={ChatPage} />
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>

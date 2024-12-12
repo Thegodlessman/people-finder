@@ -22,7 +22,10 @@ import {
     IonContent,
     IonPage,
     IonMenuButton,
-    IonAvatar
+    IonAvatar,
+    IonItemOption,
+    IonItemSliding,
+    IonItemOptions
 } from '@ionic/react';
 import { chatbubblesOutline, chevronForward, personOutline } from 'ionicons/icons';
 
@@ -197,31 +200,6 @@ const FindFriendsPage: React.FC = () => {
                     </div>
                 </IonItem>
 
-
-                <IonList lines='full'>
-                    <p color='medium'>Configuraciones</p>
-                    <IonItem>
-                        <IonLabel>Gestion de la cuenta</IonLabel>
-                        <div slot='end'>
-                            <IonIcon color="medium" icon={chevronForward}></IonIcon>
-                        </div>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonLabel>Notificaciones</IonLabel>
-                        <div slot='end'>
-                            <IonIcon color="medium" icon={chevronForward}></IonIcon>
-                        </div>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonLabel>Privacidad y datos</IonLabel>
-                        <div slot='end'>
-                            <IonIcon color="medium" icon={chevronForward}></IonIcon>
-                        </div>
-                    </IonItem>
-                </IonList>
-
             </IonContent>
         </IonMenu>
             <IonPage id="main-content">
@@ -232,7 +210,7 @@ const FindFriendsPage: React.FC = () => {
                                 <IonIcon slot="icon-only" icon={personOutline} />
                             </IonMenuButton>
                         </IonButtons>
-                        <IonTitle> <a href='/finder'> people finder </a></IonTitle>
+                        <IonTitle> <a href='/finder' className='title-app'> people finder </a></IonTitle>
                         <IonButtons slot='end'>
                             <IonButton href="/chats">
                                 <IonIcon slot="icon-only" icon={chatbubblesOutline} />
@@ -278,20 +256,29 @@ const FindFriendsPage: React.FC = () => {
 
                     <IonModal isOpen={showModal} onDidDismiss={() => setShowModal(false)}>
                         <div className="modal-content">
-                            <h2>Solicitudes de Amistad</h2>
-                            <IonList>
+                            <h2 className='ion-padding'>Solicitudes de Amistad</h2>
+
+                            <IonList lines='none'>
                                 {friendRequests.map((request) => (
-                                    <IonItem key={request._id}>
-                                        <IonLabel>
-                                            {request.name} {request.lastName} @{request.username}
-                                        </IonLabel>
-                                        <IonButton color="success" onClick={() => handleAcceptRequest(request._id)}>
-                                            Aceptar
-                                        </IonButton>
-                                        <IonButton color="danger" onClick={() => handleRejectRequest(request._id)}>
-                                            Rechazar
-                                        </IonButton>
-                                    </IonItem>
+                                    <IonItemSliding>
+                                        <IonItem lines='none' key={request._id}>
+                                            <IonAvatar slot='start'>
+                                                <img alt="" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                                            </IonAvatar>
+                                            <IonLabel>
+                                                {request.name} {request.lastName} @{request.username}
+                                            </IonLabel>
+                                        </IonItem>
+                                        <IonItemOptions slot='end'>
+                                            <IonItemOption color="success" onClick={() => handleAcceptRequest(request._id)}>
+                                                Aceptar
+                                            </IonItemOption>
+                                            <IonItemOption color="danger" onClick={() => handleRejectRequest(request._id)}>
+                                                Rechazar
+                                            </IonItemOption>
+                                        </IonItemOptions>
+
+                                    </IonItemSliding>
                                 ))}
                             </IonList>
                             <IonButton onClick={() => setShowModal(false)}>Cerrar</IonButton>
