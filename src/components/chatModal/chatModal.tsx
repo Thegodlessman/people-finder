@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import './chatModal.css'
 
 const socket: Socket = io("https://api-notepad-production.up.railway.app");
 
@@ -86,26 +87,36 @@ const ChatModal: React.FC<ChatModalProps> = ({ friend, onClose }) => {
     };
 
     return (
-        <div className="modal">
-            <h2>Chat con {friend.username}</h2>
-            <div className="messages">
+        <div className="chat-modal">
+            <h2 className="chat-title">Chat con {friend.username}</h2>
+            <div className="chat-messages">
                 {messages.map((msg, index) => (
                     <div
                         key={index}
-                        className={msg.sender === decodedToken.id ? "sent" : "received"}
+                        className={`chat-message ${msg.sender === decodedToken.id ? "chat-sent" : "chat-received"
+                            }`}
                     >
-                        <p>{msg.content}</p>
-                        <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                        <p className="message-content">{msg.content}</p>
+                        <span className="message-timestamp">
+                            {new Date(msg.timestamp).toLocaleTimeString()}
+                        </span>
                     </div>
                 ))}
             </div>
             <input
+                className="chat-input"
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
             />
-            <button onClick={handleSendMessage}>Enviar</button>
-            <button onClick={onClose}>Cerrar</button>
+            <div className="chat-buttons">
+                <button className="send-button" onClick={handleSendMessage}>
+                    Enviar
+                </button>
+                <button className="close-button" onClick={onClose}>
+                    Cerrar
+                </button>
+            </div>
         </div>
     );
 };

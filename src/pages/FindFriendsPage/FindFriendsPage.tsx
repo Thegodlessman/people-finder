@@ -176,6 +176,7 @@ const FindFriendsPage: React.FC = () => {
     };
 
     const currentUser = users[currentIndex];
+    console.log(currentUser)
 
     return (
         <><IonMenu contentId="main-content">

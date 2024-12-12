@@ -134,7 +134,9 @@ const ProfilePage: React.FC = () => {
                     const data = await response.json();
                     const newProfileImageUrl = data.profileImage;  // Asumiendo que el endpoint responde con profileImage
                     setProfileImage(newProfileImageUrl); // Actualiza la imagen de perfil
-                    toast.success("Imagen de perfil actualizada correctamente");
+                    toast.success("Imagen de perfil actualizada correctamente", {
+                        position: 'bottom-center',
+                    });
                 } catch (jsonError) {
                     console.error('Error al analizar la respuesta JSON:', jsonError);
                     toast.error("La respuesta del servidor no es un JSON válido.");
