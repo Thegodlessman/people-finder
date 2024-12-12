@@ -16,7 +16,7 @@ import {
     IonMenuButton,
     IonAvatar
 } from '@ionic/react';
-import { chatbubblesOutline, chevronForward, personOutline } from 'ionicons/icons';
+import { chatbubblesOutline, chevronForward, imageOutline, peopleCircleOutline, peopleOutline, personOutline } from 'ionicons/icons';
 import { toast, ToastContainer } from "react-toastify";
 import {
     personCircleOutline,
@@ -37,6 +37,7 @@ const ProfilePage: React.FC = () => {
         "../../assets/images/default-profile.png"
     );
     const [profileName, setProfileName] = useState<string>("Nombre del Perfil");
+    const [showChangePhoto, setShowChangePhoto] = useState(false)
     const [showConfig, setShowConfig] = useState(false);
     const history = useHistory();
 
@@ -161,7 +162,7 @@ const ProfilePage: React.FC = () => {
                             <img alt="" src={decodedToken.profileImage} />
                         </IonAvatar>
                         <IonLabel>
-                            <h3 style={{ fontSize: "20px" }}>{decodedToken.fullName}</h3>
+                            <h3 style={{ fontSize: "18px" }}>{decodedToken.fullName}</h3>
                             <span style={{ fontSize: "15px", color: "grey" }}>@{decodedToken.username}</span>
                             <p>Ver perfil</p>
                         </IonLabel>
@@ -169,31 +170,6 @@ const ProfilePage: React.FC = () => {
                             <IonIcon color="medium" icon={chevronForward}></IonIcon>
                         </div>
                     </IonItem>
-
-
-                    <IonList lines='full'>
-                        <p color='medium'>Configuraciones</p>
-                        <IonItem>
-                            <IonLabel>Gestion de la cuenta</IonLabel>
-                            <div slot='end'>
-                                <IonIcon color="medium" icon={chevronForward}></IonIcon>
-                            </div>
-                        </IonItem>
-
-                        <IonItem>
-                            <IonLabel>Notificaciones</IonLabel>
-                            <div slot='end'>
-                                <IonIcon color="medium" icon={chevronForward}></IonIcon>
-                            </div>
-                        </IonItem>
-
-                        <IonItem>
-                            <IonLabel>Privacidad y datos</IonLabel>
-                            <div slot='end'>
-                                <IonIcon color="medium" icon={chevronForward}></IonIcon>
-                            </div>
-                        </IonItem>
-                    </IonList>
 
                 </IonContent>
             </IonMenu>
@@ -205,7 +181,7 @@ const ProfilePage: React.FC = () => {
                                 <IonIcon slot="icon-only" icon={personOutline} />
                             </IonMenuButton>
                         </IonButtons>
-                        <IonTitle> <a href='/finder'> people finder </a></IonTitle>
+                        <IonTitle> <a href='/finder' className='title-app'> people finder </a></IonTitle>
                         <IonButtons slot='end'>
                             <IonButton href="/chats">
                                 <IonIcon slot="icon-only" icon={chatbubblesOutline} />
@@ -217,16 +193,22 @@ const ProfilePage: React.FC = () => {
                     <div className="image-container">
                         <img src={profileImage} className="round-image" alt="Perfil" />
                     </div>
-                    <h1 className="image-title" style={{ color: 'white' }}>{profileName}</h1>
+                    <h1 className="image-title" style={{ color: 'white', fontSize: "30px" }}>{profileName}</h1>
                     <h3 className="image-title" style={{ color: 'grey', marginBottom: "20px" }}>@{decodedToken.username}</h3>
 
                     <IonCard>
                         <IonList>
-                            <IonItem button onClick={() => setShowConfig(!showConfig)}>
-                                <IonIcon aria-hidden="true" icon={cogOutline} slot="start" />
-                                <IonLabel>Configuraciones</IonLabel>
+                            <IonItem button onClick={() => history.push("/info")}>
+                                <IonIcon aria-hidden="true" icon={peopleOutline} slot="start" />
+                                <IonLabel>Cambiar nombre</IonLabel>
                             </IonItem>
-                            {showConfig && (
+
+                            <IonItem button onClick={() => setShowChangePhoto(!showChangePhoto)}>
+                                <IonIcon aria-hidden="true" icon={imageOutline} slot="start" />
+                                <IonLabel>Cambiar foto</IonLabel>
+                            </IonItem>
+
+                            {showChangePhoto && (
                                 <div style={{ padding: "10px" }}>
                                     <input
                                         type="file"
@@ -234,19 +216,26 @@ const ProfilePage: React.FC = () => {
                                         onChange={handleChangeProfileImage}
                                         style={{ marginBottom: "10px" }}
                                     />
+                                </div>
+                            )}
+
+                            <IonItem lines="none" button onClick={() => history.push("/info")}>
+                                <IonIcon aria-hidden="true" icon={informationCircleOutline} slot="start" />
+                                <IonLabel>Informacion</IonLabel>
+                            </IonItem>
+                            <IonItem button onClick={() => setShowConfig(!showConfig)}>
+                                <IonIcon aria-hidden="true" icon={trashBinOutline} slot="start" />
+                                <IonLabel>Eliminar cuenta</IonLabel>
+                            </IonItem>
+                            {showConfig && (
+                                <div style={{ padding: "10px" }}>
                                     <IonButton expand="block" color="danger" onClick={handleDeleteAccount}>
-                                        <IonIcon slot="start" icon={trashBinOutline} />
                                         Eliminar Cuenta
                                     </IonButton>
                                 </div>
                             )}
-                            <IonItem button onClick={() => history.push("/info")}>
-                                <IonIcon aria-hidden="true" icon={informationCircleOutline} slot="start" />
-                                <IonLabel>Información</IonLabel>
-                            </IonItem>
                         </IonList>
                     </IonCard>
-
                     <IonButton expand="block" color="primary" onClick={handleLogout}>
                         <IonIcon slot="start" icon={logOutOutline} />
                         Cerrar Sesión

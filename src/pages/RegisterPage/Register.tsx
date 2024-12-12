@@ -76,34 +76,33 @@ const Register: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle class="ion-text-center">DePelis!</IonTitle>
+                    <IonTitle class="ion-text-center title-app">People finder</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="container">
                 <div className='ion-header'>
                     <h1 className="login-title">Crear cuenta</h1>
-                    <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de peliculas</label>
                 </div>
                 <div className='inputs-container'>
                     <div className="input-groups">
                         <IonInput label='Nombre' fill='solid'
                             labelPlacement="floating"
-                        value={name} onIonChange={(e) => setName(e.detail.value!)} />
+                            value={name} onIonChange={(e) => setName(e.detail.value!)} />
                         <IonInput label="Apellido" fill='solid'
                             labelPlacement="floating"
-                        value={lastName} onIonChange={(e) => setLastName(e.detail.value!)} />
+                            value={lastName} onIonChange={(e) => setLastName(e.detail.value!)} />
                     </div>
 
                     <div className="input-group">
                         <IonInput label="Usuario" fill='solid'
                             labelPlacement="floating" value={username} onIonChange={(e) => setUsername(e.detail.value!)} />
                     </div>
-                    
+
                     <div className="input-group">
                         <IonInput label="Correo" fill='solid'
                             labelPlacement="floating" value={email} onIonChange={(e) => setEmail(e.detail.value!)} />
                     </div>
-                    
+
                     <div className="input-group">
                         <IonInput type="password" fill='solid'
                             labelPlacement="floating" label="Contraseña" value={password} onIonChange={(e) => setPassword(e.detail.value!)} />
@@ -113,11 +112,11 @@ const Register: React.FC = () => {
                         <IonInput type="password" fill='solid'
                             labelPlacement="floating" label="Confirmar contraseña" value={confirmPassword} onIonChange={(e) => setConfirmPassword(e.detail.value!)} />
                     </div>
-                    
-                    <div  className="input-group">
+
+                    <div className="input-group">
                         <input type="file" onChange={handleImageChange} />
                     </div>
-                    
+
                 </div>
                 <ToastContainer />
                 <div>

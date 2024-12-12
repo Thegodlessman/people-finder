@@ -38,31 +38,6 @@ const TabBar: React.FC = () => {
             </div>
           </IonItem>
 
-
-          <IonList lines='full'>
-            <p color='medium'>Configuraciones</p>
-            <IonItem>
-              <IonLabel>Gestion de la cuenta</IonLabel>
-              <div slot='end'>
-                <IonIcon color="medium" icon={chevronForward}></IonIcon>
-              </div>
-            </IonItem>
-
-            <IonItem>
-              <IonLabel>Notificaciones</IonLabel>
-              <div slot='end'>
-                <IonIcon color="medium" icon={chevronForward}></IonIcon>
-              </div>
-            </IonItem>
-
-            <IonItem>
-              <IonLabel>Privacidad y datos</IonLabel>
-              <div slot='end'>
-                <IonIcon color="medium" icon={chevronForward}></IonIcon>
-              </div>
-            </IonItem>
-          </IonList>
-
         </IonContent>
       </IonMenu>
       <IonPage id="main-content">
@@ -73,7 +48,7 @@ const TabBar: React.FC = () => {
                 <IonIcon slot="icon-only" icon={personOutline} />
               </IonMenuButton>
             </IonButtons>
-            <IonTitle> <a href='/finder'> people finder </a></IonTitle>
+            <IonTitle class="ion-text-center"> <a href='/finder'> people finder </a></IonTitle>
             <IonButtons slot='end'>
               <IonButton href="/home/favorite">
                 <IonIcon slot="icon-only" icon={chatbubblesOutline} />

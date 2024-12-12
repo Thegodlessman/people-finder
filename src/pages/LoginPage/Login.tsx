@@ -54,14 +54,13 @@ const Login: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle class="ion-text-center">DePelis!</IonTitle>
+                    <IonTitle class="ion-text-center title-app">People finder</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div>
                     <div className="ion-header">
                         <h1 className="login-title">Iniciar Sesion</h1>
-                        <label className="login-subtitle">Únase a nuestra comunidad y experimente una búsqueda perfecta de películas</label>
                     </div>
                     <div className="ion-item">
                         <IonInput
