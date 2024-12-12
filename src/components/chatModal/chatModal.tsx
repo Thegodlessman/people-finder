@@ -42,7 +42,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ friend, onClose }) => {
                         },
                     }
                 );
-                console.log("Historial de mensajes:", response.data); // Depuración
                 setMessages(response.data); // Establecer el historial en el estado
             } catch (error) {
                 console.error("Error al obtener mensajes:", error);
