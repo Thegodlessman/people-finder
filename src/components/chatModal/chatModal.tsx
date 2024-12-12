@@ -108,6 +108,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ friend, onClose }) => {
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
+                placeholder="Escribe un mensaje..."
             />
             <div className="chat-buttons">
                 <button className="send-button" onClick={handleSendMessage}>

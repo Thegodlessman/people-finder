@@ -200,7 +200,7 @@ const ProfilePage: React.FC = () => {
 
                     <IonCard>
                         <IonList>
-                            <IonItem button onClick={() => history.push("/info")}>
+                            <IonItem button>
                                 <IonIcon aria-hidden="true" icon={peopleOutline} slot="start" />
                                 <IonLabel>Cambiar nombre</IonLabel>
                             </IonItem>
@@ -221,7 +221,7 @@ const ProfilePage: React.FC = () => {
                                 </div>
                             )}
 
-                            <IonItem lines="none" button onClick={() => history.push("/info")}>
+                            <IonItem lines="none" button>
                                 <IonIcon aria-hidden="true" icon={informationCircleOutline} slot="start" />
                                 <IonLabel>Informacion</IonLabel>
                             </IonItem>
